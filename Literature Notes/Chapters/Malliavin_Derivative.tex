@@ -1,0 +1,385 @@
+\chapter{Malliavin Derivative} 
+
+In this chapter, we construct the Malliavin Derivative, prove some handy results to compute it and finish by presenting the duality between the Malliavin Derivative and the Skorohod Integral.
+
+\section{Construction}
+
+Using the Wiener-Itô Chaos Expansion, it is quite natural to define the derivative of a random variable. But for this to make sense, it is necessary to restrict the definition to a suitable context as follows.
+
+\begin{definition}
+Let $F \in L^2(\mathbb{P})$ be $\mathcal{F}_t$-measurable with Wiener-Itô Chaos Expansion:
+$$
+F = \sum_{n=0}^\infty I_n(f_n)
+$$
+
+\begin{enumerate}
+\item We say that $F \in \mathbb{D}_{1,2}$ if 
+\begin{equation}\label{eq:202310241435} 
+\| F \|_{\mathbb{D}_{1,2}}^2 := \sum_{i=0}^\infty n n! \| f_n \|_{L^2([0,T]^n)}^2 < \infty
+\end{equation}
+
+\item If $F \in \mathbb{D}_{1,2}$, we define the \textbf{Malliavin derivative} $D_t F$ of $F$ at time $t$ as 
+\begin{equation}\label{eq:202310241436}
+D_t F = \sum_{n=1}^\infty n I_{n-1}(f_n(\cdot, t)), \quad t \in [0,T]
+\end{equation} 
+\end{enumerate}
+in which $I_{n-1}(f_n(\cdot, t))$ is the $(n-1)$-fold iterated integral of $f_n(t_1, \ldots, t_{n-1}, t)$ with respect to the first $n-1$ variables, and $t_n = t$ as a parameter. 
+\end{definition}
+
+The restriction to $\mathbb{D}_{1,2}$ guarantees that the Malliavin derivative is well-defined in $L^2$.
+
+\begin{remark}
+If \eqref{eq:202310241435} holds, then 
+\begin{equation*}
+	\begin{aligned}
+		\| D_\cdot F \|_{L^2(\mathbb{P} \times \lambda)}^2 &= \mathbb{E} \left[ \int_0^T (D_t F)^2 ~\mathrm{d}t \right] = \sum_{n=1}^\infty \int_0^T n^2 (n-1)! \| f_n(\cdot, t) \|_{L^2([0,T]^n)}^2 ~\mathrm{d}t \\
+		&= \sum_{n=1}^\infty n n! \| f_n \|_{L^2([0,T]^n)}^2 = \| F \|_{\mathbb{D}_{1,2}}^2 < \infty
+	\end{aligned}
+\end{equation*} 
+
+Therefore, $D_\cdot F = D_t F$ is well-defined in $L^2(\mathbb{P} \times \lambda)$.
+\end{remark}
+
+\begin{theorem}[Closability of Malliavin Derivative]
+Suppose that $F \in L^2(\mathbb{P})$ and $F_k \in \mathbb{D}_{1,2}$, $k = 1, 2, \ldots$, satisfy
+
+\begin{enumerate}
+	\item[a)] $F_k \to F$ as $k \to \infty$ in $L^2(\mathbb{P})$, 
+	\item[b)] $(D_t F_k)_{k=1}^\infty$ converges in $L^2(\mathbb{P} \times \lambda)$.
+\end{enumerate}
+
+Then $F \in \mathbb{D}_{1,2}$ and $D_t F_k \to D_t F$ in $L^2(\mathbb{P} \times \lambda)$.
+\end{theorem}
+
+\begin{proof} 
+1. Write the Wiener-Itô Expansion of $F_k$ and $F$. Let
+$$
+F = \sum_{n=0}^\infty I_n(f_n), \quad F_k = \sum_{n=0}^\infty I_n(f_n^{(k)})
+$$
+
+2. Using (a), we have that $f_n^{(k)} \to f_n$ as $k \to \infty$ in $L^2(\lambda^n)$ for all $n$.
+
+3. By (b), 
+$$
+\sum_{n=1}^\infty n n! \| f_n^{(k)} - f_n^{(j)} \|_{L^2(\lambda^n)}^2 = \| D_t F_k - D_t F_j \|_{L^2(\mathbb{P} \times \lambda)} \longrightarrow 0, \quad j,k \to \infty
+$$
+
+4. Using Fatou's Lemma,
+$$
+\lim_{k \to \infty} \sum_{n=1}^\infty n n! \| f_n^{(k)} - f_n \|_{L^2(\lambda^n)}^2 \le \lim_{k \to \infty} \liminf_{j \to \infty} \sum_{n=1}^\infty n n! \| f_n^{(k)} - f_n^{(j)} \|_{L^2(\lambda^n)}^2 = 0 
+$$
+
+5. Thus, $F \in \mathbb{D}_{1,2}$ and $D_t F_k \to D_t F$ in $L^2(\mathbb{P} \times \lambda)$.
+\end{proof}
+
+\section{Computation} 
+
+In this section, we explore how to compute the Malliavin derivative and some properties.  
+
+\subsection{Chain Rule} 
+
+Suppose that $f_n(t_1, \ldots, t_n) = f(t_1) \cdots f(t_n)$.
+
+Write $D_t I_n(f_n)$ using Hermite polynomials:
+\begin{equation*}
+\begin{aligned}
+	D_t I_n(f_n) &= n I_{n-1}(f_n(\cdot, t)) \\
+		     &= n I_{n-1}(f^{\otimes (n-1)})f(t) \\
+		     &= n \| f \|^{n-1} h_{n-1} \left( \frac{\theta}{\| f \|} \right) f(t)
+\end{aligned}
+\end{equation*}
+
+Then use that $h_n'(x) = n h_{n-1}(x)$ to get 
+\begin{equation}\label{eq:202310241449}
+	D_t h_n \left( \frac{\theta}{\| f \|} \right) = h_n' \left( \frac{\theta}{\| f \|} \right) \frac{f(t)}{\| f \|}
+\end{equation}
+
+From here, we extract two useful identities. For $n = 1$, we
+\begin{equation*}
+	D_t \int_0^T f(s) ~\mathrm{d}W(s) = f(t)
+\end{equation*}
+and for $n > 1$, using induction,
+\begin{equation*}
+	D_t \left( \int_0^T f(s) ~\mathrm{d}W(s) \right)^n = n \left( \int_0^T f(s) ~\mathrm{d}W(s) \right)^{n-1} f(t)
+\end{equation*}
+
+Let $\mathbb{D}_{1,2}^0$ be the set of $F \in L^2(\mathbb{P})$ whose chaos expansion has only finitely many items.
+
+\begin{theorem}[Product Rule]\label{thm:product_rule}
+	If $F_1, F_2 \in \mathbb{D}_{1,2}^0$, then $F_1, F_2 \in \mathbb{D}_{1,2}$ and $F_1 F_2 \in \mathbb{D}_{1,2}$ and 
+	$$
+	D_t(F_1 F_2) = F_1 D_t F_2 + F_2 D_t F_1
+	$$
+\end{theorem}
+
+\begin{proof}
+	It is clear that $F_1, F_2 \in \mathbb{D}_{1,2}$. 
+
+	To prove the second claim, notice that Gaussian r.v. have finite moments.
+
+	Let $\{ \xi_i \}_{i=1}^\infty$ be an orthogonal basis of $L^2([0,T]^n)$. Take $F_k^{(n)}$ as linear combination of iterated itegrals of the tensor product of $\xi_i$. 
+
+	By the Proposition \ref{prop:202311031501}, we have the result for $F_K^{(n)}$. Choose sequence that converges $F_k^{(n)} \to F_k$ and $D_t F_k^{(n)} \to D_t F_k$. 
+\end{proof}
+
+\begin{theorem}[Chain Rule]
+	Let $G \in \mathbb{D}_{1,2}$ and $g \in C^1(\mathbb{R})$ with bounded derivative. Then $g(G) \in \mathbb{D}_{1,2}$ and
+	\begin{equation}
+		D_t g(G) = g'(G) D_t G
+	\end{equation}
+\end{theorem}
+
+\subsection{Conditional Expectation}
+
+What happens when we take the conditional expectation of 1. the integral of a function in $L^2([0, T])$, 2. the integral of an $\mathbb{F}$-adapted process, and 3. an iterated integral? After answering these questions, we look at what happens when we take the derivative of a conditional expectation. 
+
+\begin{definition}
+Let $G$ be a Borel set in $[0,T]$. We define $\mathcal{F}_G$ to be the completed $\sigma$-algebra generated by all random variables of the form 
+$$
+F = \int_0^T \chi_A(t) ~\mathrm{d}W(t)
+$$
+for all Borel sets $A \subseteq G$.
+\end{definition}
+
+\begin{lemma}\label{lm:202310311340} 
+	For any $g \in L^2([0,T])$ we have 
+	$$
+	\mathbb{E} \left[ \left.\int_0^T g(t) ~\mathrm{d} W(t) ~\right| ~\mathcal{F}_G \right] = \int_0^ T \chi_G(t) g(t) ~\mathrm{d} W(t)
+	$$
+\end{lemma}
+
+\begin{proof}
+	The first step is to prove that $\int_0^T \chi_G(t) g(t) ~\mathrm{d}W(t)$ is $\mathcal{F}_G$-measurable. Since continuous functions are dense in $L^2([0,T])$, assume that $g$ is continuous. Then 
+	$$
+	\int_0^T \chi_G(t) g(t) ~\mathrm{d}W(t) = \lim_{\Delta t_i \to 0} \sum_{i=0}^n g(t_i) \int_{t_i}^{t_{i+1}} \chi_G(t) ~\mathrm{d}W(t)
+	$$
+	with the limit in $L^2(\mathbb{P})$. And we can take a subsequence which converges almost surely.
+
+	Now we prove that 
+	$$
+	\mathbb{E} \left[ F \int_0^T g(t) ~\mathrm{d}W(t) \right] = \mathbb{E} \left[ F \int_0^T \chi_G(t) g(t) ~\mathrm{d}W(t) \right] 
+	$$
+	in which $F$ is a bounded $\mathcal{F}_G$-measurable random variable. We may assume $F = \int_0^T \chi_A(t) ~\mathrm{d}W(t)$ for $A \subseteq G$. Applying Itô Isometry, we have the result.
+\end{proof}
+
+\begin{lemma}\label{lm:202310311343}
+	Let $G \subseteq [0,T]$ be a Borel set and $v(t)$ be a stochastic process  
+	\begin{enumerate}
+	\item $v(t)$ is measurable with respect to $\mathcal{F}_t \cap \mathcal{F}_G = \mathcal{F}_{[0,t] \cap G}$ for all $t \in [0,T]$.
+	\item $\mathbb{E} \left[ \int_0^T v^2(t) ~\mathrm{d}t \right] < \infty$.
+	\end{enumerate}
+
+	Then the following integral is $\mathcal{F}_G$-measurable:
+	$$
+	\int_G v(t) ~\mathrm{d}W(t)
+	$$
+\end{lemma}
+
+\begin{proof}
+	Consider $v$ as an elementary process and integrate. The general case follows from approximation.
+\end{proof}
+
+\begin{lemma}\label{lm:202310311347}
+	Let $u(t)$ be an $\mathbb{F}$-adapted stochastic process in $L^2(\mathbb{P} \times \lambda)$. Then 
+	$$
+	\mathbb{E} \left[ \left.\int_0^T u(t) ~\mathrm{d}W(t) ~\right| ~\mathcal{F}_G \right] = \int_G \mathbb{E} [u(t) \mid \mathcal{F}_G] ~\mathrm{d} W(t)
+	$$
+\end{lemma}
+
+\begin{proof}
+	By the lemma \ref{lm:202310311343}, we have that $\int_G \mathbb{E} [u(t) \mid \mathcal{F}_G] ~\mathrm{d} W(t)$ is $\mathcal{F}_G$-measurable. 
+
+	Our goal is to verify
+	$$
+	\mathbb{E} \left[ F \int_0^T u(t) ~\mathrm{d}W(t) \right] = \mathbb{E} \left[ F \int_G \mathbb{E}[u(t) \mid \mathcal{F}_G] ~\mathrm{d}W(t) \right]
+	$$
+	for $F = \int_A ~\mathrm{d}W(t)$ and $A \subseteq G$ Borel. 
+
+	Apply Itô Isometry to both sides of the equation and use a density argument. 
+
+\end{proof}
+
+\begin{proposition}\label{prop:202310311509} 
+	Let $f_n \in \hat{L}^2([0,T]^n)$. Then $\mathbb{E}[I_n(f_n) \mid \mathcal{F}_G] = I_n[f_n \chi_G^{\otimes n}]$.
+\end{proposition}
+
+\begin{proof}
+	By induction on $n$ and the lemma \ref{lm:202310311347}.
+\end{proof}
+
+\begin{proposition}\label{prop:202310311506} 
+	If $F \in  \mathbb{D}_{1,2}$, then $\mathbb{E}[F \mid \mathcal{F}_G] \in \mathbb{D}_{1,2}$ and 
+	$$
+	D_t \mathbb{E}[F \mid \mathcal{F}_G] = \mathbb{E}[D_t F \mid \mathcal{F}_G] \chi_G(t)
+	$$
+\end{proposition}
+
+\begin{proof}
+	If $F = I_n(f_n)$, then the result follows from the Proposition \ref{prop:202310311509}. 
+
+	More generally, if $F = \sum_{n=0}^\infty I_n(f_n) \in \mathbb{D}_{1,2}$, we define $F_k = \sum_{n=0}^k I_n(f_n)$.
+
+	Then $F_k \to F$ in $L^2(\Omega)$ and $D_t F_k \to D_t F$ in $L^2(\mathbb{P} \times \lambda)$ as $k \to \infty$. 
+
+	Using the previous case, we have $D_t \mathbb{E}[F_k \mid \mathcal{F}_G] = \mathbb{E}[D_t F_k \mid \mathcal{F}_G] \chi_G(t)$ for all $k$. Taking the limit in $L^2(\mathbb{P} \times \lambda)$, we have the result. 
+\end{proof}
+
+\begin{corollary}\label{cor:202311071657}
+	Let $u(s)$ be an $\mathbb{F}$-adapted stochastic process such that $u(s) \in \mathbb{D}_{1,2}$ for all $s \in [0,T]$. Then 
+	\begin{enumerate}
+	\item $D_t u(s)$, $s \in [0,T]$, is $\mathbb{F}$-adapted for all $t$. 
+	\item $D_t u(s) = 0$ for $t > s$.
+	\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+	Apply the Proposition \ref{prop:202310311506} to $D_t u(s)$.
+\end{proof}
+
+\section{Malliavin Derivative and Skorohod Integral} 
+
+The main question behind this section is how the Malliavin derivative and the Skorohod integral are related. We show the duality between them, an integration by parts formula, the closability of the Skorohod integral, and the Fundamental Theorem of Calculus. 
+
+We start by showing that the Malliavin derivative is the adjoint operator of the Skorohod integral.
+
+\begin{theorem}[Duality Formula]\label{thm:duality_formula}
+	Let $F \in \mathbb{D}_{1,2}$ be $\mathcal{F}_T$-measurable and $u$ be a Skorohod integrable stochastic process. Then 
+	\begin{equation*}
+		\mathbb{E} \left[ F \int_0^T u(t) ~\delta W(t) \right] = \mathbb{E} \left[ \int_0^T u(t) D_t F ~\mathrm{d}t \right]
+	\end{equation*}
+
+	Put another way, 
+	$$
+	\langle \delta(u), F \rangle_{L^2(\mathbb{P})} = \langle u, D_{\cdot} F \rangle_{L^2(\mathbb{P} \times \lambda)}
+	$$
+\end{theorem}
+
+\begin{proof}
+	\begin{enumerate}
+	\item Write the Chaos expansions of $F$ and $u(t)$.
+	\item Replace the expansions in both sides of the equation.
+	\item Notice that $\langle f_{k+1}, \hat{g}_k \rangle_{L^2([0,T]^{k+1})} = \langle f_{k+1}, g_k \rangle_{L^2([0,T]^{k+1})}$.
+	\end{enumerate}
+\end{proof}
+
+\begin{theorem}[Integration by Parts]
+	Let $u(t)$, $t \in [0,T]$ be Skorohod integrable and $F \in \mathbb{D}_{1,2}$ such that $Fu(t)$ is Skorohod integrable. Then 
+	$$
+	F \int_0^T u(t) ~\delta W(t) = \int_0^T Fu(t) ~\delta W(t) + \int_0^T u(t) D_t F~\mathrm{d}t
+	$$
+\end{theorem}
+
+\begin{proof}
+	Assume that $F \in \mathbb{D}_{1,2}^0$ and let $G \in \mathbb{D}_{1,2}^0$. Using the \hyperref[thm:duality_formula]{Duality Formula} and the \hyperref[thm:product_rule]{Product Rule}, we have that 
+	\begin{equation*}
+		\begin{aligned}
+			\mathbb{E} \left[ G \int_0^T Fu(t)~\delta W(t) \right] &= \mathbb{E} \left[ \int_0^T Fu(t) D_t G~\mathrm{d}t \right] \\
+									       &= \mathbb{E} \left[ GF \int_0^T u(t)~\delta W(t) \right] - \mathbb{E} \left[ G \int_0^T u(t) D_t F~\mathrm{d}t \right]
+		\end{aligned}
+	\end{equation*}
+
+	Since $\mathbb{D}_{1,2}^0$ is dense in $L^2(\mathbb{P})$, the result follows. The general case follows by approximation.
+\end{proof}
+
+In fact, we can replace the hypothesis that $Fu$ is Skorohod integrable by the existence in $L^2(\mathbb{P})$ of 
+$$
+F \int_0^T u(t) ~\delta W(t) \quad \text{ and } \quad \int_0^T u(t) D_t F ~\mathrm{d}t
+$$
+
+\begin{theorem}[Closability of the Skorohod Integral]
+Let $(u_n)$ be a sequence of Skorohod integrable stochastic processes and that 
+$$
+\delta(u_n) = \int_0^T u_n(t) ~\delta W(t)
+$$
+converges in $L^2(\mathbb{P})$. And suppose that $\lim_{n \to \infty} u_n = 0$ in $L^2(\mathbb{P} \times \lambda)$. 
+
+Then 
+$ 
+\lim_{n \to \infty} \delta(u_n) = 0
+$
+in $L^2(\mathbb{P})$. 
+\end{theorem}
+
+\begin{proof}
+	Using the \hyperref[thm:duality_formula]{Duality Formula}, 
+	$$
+	\langle \delta(u_n), F \rangle_{L^2(\mathbb{P})} = \langle u_n, D_{\cdot} F \rangle_{L^2(\mathbb{P} \times \lambda)} \longrightarrow 0
+	$$
+	as $n \to \infty$. Thus, $\delta(u_N) \to 0$ weakly in $L^2(\mathbb{P})$. Since $(\delta(u_n))$ is convergent in $L^2(\mathbb{P})$, we have that $\delta(u_n) \to 0$ in $L^2(\mathbb{P})$.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem of Calculus]
+	Let $u(s)$ be a stochastic process such that $$\mathbb{E}\left[ \int_0^T u^2(s) ~\mathrm{d}s \right] < \infty$$
+
+	Also suppose that $u(s) \in \mathbb{D}_{1,2}$ for all $s \in [0,T]$, $D_t u \in \text{Dom}(\delta)$ and that $$\mathbb{E}\left[ \int_0^T (\delta(D_tu))^2 ~\mathrm{d}t \right] < \infty$$
+
+	Then $\int_0^T u(s)~\delta W(s)$ is well-defined and belongs to $\mathbb{D}_{1,2}$ and 
+	$$
+	D_t \left( \int_0^T u(s)~\delta W(s) \right) = \int_0^T D_t u(s) ~\delta W(s) + u(t)
+	$$
+\end{theorem}
+
+\begin{proof}
+	We start by proving a simpler case. Suppose that $u(s) = I_n(f_n(\cdot, s))$, where $f_n(t_1, \ldots, t_n, s)$ is symmetric with respect to $t_1, \ldots, t_n$. Then 
+	$$
+	\int_0^T u(s) ~\delta W(s) = I_{n+1}[\tilde{f}_n]
+	$$
+	where 
+	$$
+	\tilde{f}_n(x_1, \ldots, x_{n+1}) = \frac{1}{n+1} \left[ f_n(\cdot, x_1) + \cdots + f_n(\cdot, x_{n+1}) \right]
+	$$
+
+	Thus,
+	\begin{equation}\label{eq:202311091655}
+	\begin{aligned}
+		D_t \left( \int_0^T u(s) ~\delta W(s) \right) &= (n+1) I_n[\tilde{f}_n (\cdot, t)] \\
+							      &= I_n \left[ f_n(\cdot, x_1) + \cdots + f_n(\cdot, x_n) + f_n(\cdot, t) \right] \\
+							      &= I_n \left[ f_n(\cdot, x_1) + \cdots + f_n(\cdot, x_n) \right] + u(t)
+	\end{aligned}
+	\end{equation}
+
+	Now consider 
+	\begin{equation}\label{eq:202311091657}
+	\begin{aligned}
+	\delta(D_t u) &= \int_0^T D_t u(s) ~\delta W(s) \\
+		      &= \int_0^T n I_{n-1}[f_n(\cdot, t, s)]~\delta W(s) \\
+		      &= n I_n[\hat{f}_n(\cdot, t, \cdot)]
+	\end{aligned}
+	\end{equation}
+	where
+	$$
+	\hat{f}_n = \frac{1}{n} \left[ f_n(t, \cdot, x_1) + \cdots + f_n(t, \cdot, x_n) \right]
+	$$
+
+	Using the symmetrization above into \eqref{eq:202311091657}, we obtain
+	\begin{equation}\label{eq:202311091700}
+	\begin{aligned}
+	\int_0^T D_t u(s) ~\delta W(s) = I_n \left[ f_n(t, \cdot, x_1) + \cdots + f_n(t, \cdot, x_n) \right] 
+	\end{aligned}
+	\end{equation}
+
+	Combining \eqref{eq:202311091655} and \eqref{eq:202311091700}, we have
+	$$
+	D_t \left( \int_0^T u(s) ~\delta W(s) \right) = \int_0^T D_t u(s) ~\delta W(s) + u(t) 
+	$$
+
+	For the general case, when $u(s) = \sum_{n=0}^\infty I_n[f_n(\cdot, s)]$, consider $u_m(s) = \sum_{n=0}^m I_n[f_n(\cdot, s)]$. By the previous argument, 
+	$$
+	D_t(\delta(u_m)) = \delta(D_t u_m) + u_m(t)
+	$$
+	for all $t$.
+
+	The result follows by taking $m \to \infty$, which requires some technicalities (see \cite{nunno2008malliavin}).
+\end{proof}
+
+\begin{corollary}
+	Suppose that $u$ satisfies the conditions of the theorem and that $u(s)$ is $\mathbb{F}$-adapted. Then
+	$$
+	D_t \left( \int_0^T u(s)~\mathrm{d} W(s) \right) = \int_t^T D_t u(s) ~\mathrm{d} W(s) + u(t)
+	$$
+
+\end{corollary}
+
+\begin{proof}
+	Apply the Corollary \ref{cor:202311071657}.
+\end{proof}

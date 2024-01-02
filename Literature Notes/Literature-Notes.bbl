@@ -1,0 +1,23 @@
+\begin{thebibliography}{N{\O}P08}
+
+\bibitem[It{\^o}51]{ito1951multiple}
+Kiyosi It{\^o}.
+\newblock Multiple wiener integral.
+\newblock {\em Journal of the Mathematical Society of Japan}, 3(1):157--169, 1951.
+
+\bibitem[NN18]{nualart2018introduction}
+David Nualart and Eulalia Nualart.
+\newblock {\em Introduction to Malliavin calculus}, volume~9.
+\newblock Cambridge University Press, 2018.
+
+\bibitem[N{\O}P08]{nunno2008malliavin}
+Giulia~Di Nunno, Bernt {\O}ksendal, and Frank Proske.
+\newblock {\em Malliavin calculus for L{\'e}vy processes with applications to finance}.
+\newblock Springer, 2008.
+
+\bibitem[Oks13]{oksendal2013stochastic}
+Bernt Oksendal.
+\newblock {\em Stochastic differential equations: an introduction with applications}.
+\newblock Springer Science \& Business Media, 2013.
+
+\end{thebibliography}

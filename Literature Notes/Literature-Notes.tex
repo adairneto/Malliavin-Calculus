@@ -1,0 +1,31 @@
+\documentclass[12pt,a4paper,twoside]{report}
+\input{../LaTeX_Template/preamble.tex}
+
+% Title
+\author{\sffamily \href{https://github.com/adairneto}{Adair Antonio da Silva Neto}}
+\title{\sffamily \uppercase{Malliavin Calculus}}
+\date{\sffamily \today}
+
+% Setup
+\hypersetup{
+    pdftitle={Malliavin Calculus},
+}
+
+\begin{document}
+
+% Make title and TOC, start counting pages
+\maketitle
+\tableofcontents
+\thispagestyle{empty}
+\setcounter{page}{1}
+
+\include{Chapters/Chaos-Expansion}
+\include{Chapters/The_Skorohod_Integral.tex}
+\include{Chapters/Malliavin_Derivative.tex}
+
+\nocite{*}
+\bibliographystyle{alpha}
+\bibliography{Literature-Notes.bib}
+\addcontentsline{toc}{chapter}{References}
+
+\end{document}

@@ -1,0 +1,95 @@
+\chapter{The Skorohod Integral}
+
+\section{Construction}
+
+Take $u(t)$ measurable random variable (from a stochastic process $u(x,t)$) in $L^2(\mathbb{P})$.
+
+Write the Chaos Expansion $u(t) = \sum_{n=0}^\infty I_{n}(f_{n,t})$ for each $t \in [0,T]$. This gives us symmetric functions $f_{n,t}(t_1, \ldots, t_n)$.
+
+Since $f_{n,t}(t_1, \ldots, t_n)$ also depends on $t$, we can write $f_n(t_1, \ldots, t_n, t_{n+1})$, with $t_{n+1} = t$, and take its symmetrization $\hat{f_n}$.
+% $$
+% \hat{f_n} (t_1, \ldots, t_{n+1}) = \frac{1}{n+1} \left[ f_n(t_1, \ldots, t_{n+1}) + f_n(t_2, \ldots, t_{n+1}, t_1) + \cdots + f_n(t_1, \ldots, t_{n+1}, t_{n}) \right]
+% $$
+
+Define the \textbf{Skorohod Integral} as
+$$
+\delta(u) = \int_0^T u(t)~\delta W(t) = \sum_{n=0}^\infty I_{n+1}(\hat{f_n})
+$$
+
+\begin{remark}\label{rmk:202309060706}
+$u \in \text{Dom}(\delta)$ iff. 
+$$
+\mathbb{E}[\delta(u)^2] = \sum_{n=0}^\infty (n+1)! \| \hat{f}_n \|_{L^2([0,T]^{n+1})}^2 < \infty
+$$
+\end{remark}
+
+\section{Properties}
+
+\begin{enumerate}
+\item The Skorohod integral is a linear operator.
+\item The Skorohod integral is additive: we can compute over $(0,t]$ and $(t, T]$ using characteristic functions.
+\item Since Itô integrals have zero expectation, $$ \mathbb{E}[\delta(u)] = 0 $$
+\end{enumerate}
+
+\section{The Skorohod Integral as an Extension of the Itô Integral}
+
+Now, how is the Skorohod Integral related to the Itô integral? The Skorohod integral is an extension of the Itô integral for integrands that, not necessarily, are $\mathbb{F}$-adapted. We'll show that if the integrand is $\mathbb{F}$-adapted, then they coincide.
+
+To prove that, we'll need the following lemma.
+
+\begin{lemma}\label{lm:202309051608}
+Suppose that $u(t)$, $t \in [0,T]$, is a measurable stochastic process such that, for all $t \in [0,T]$, the random variable $u(t)$ is $\mathcal{F}_T$-measurable and $\mathbb{E}[u^ 2(t)] <\infty$. If 
+$$
+u(t) = \sum_{n=0}^\infty I_n(f_n(\cdot, t))
+$$
+is its Wiener-Itô chaos expansion, then $u$ is $\mathbb{F}$-adapted iff.
+$$
+t < \max \{ t_1, \ldots, t_n \} \implies f_n(t_1, \ldots, t_n, t) = 0 \quad \text{a.e.}
+$$
+with respect to the Lebesgue measure in $[0,T]^n$.
+\end{lemma}
+
+\begin{proof} 
+Let $g \in \hat{L}^2([0,T]^n)$ and compute
+$$
+\mathbb{E}[I_n(g) \mid \mathcal{F}_t] = I_n(g(t_1, \ldots, t_n) \chi_{\{ \max ~t_i < t \}})
+$$
+
+Note that $u(t)$ is $\mathbb{F}$-adapted iff.
+$$
+\mathbb{E}[u(t) \mid \mathcal{F}_t] = u(t)
+$$
+which is equivalent to 
+$$
+f_n(t_1, \ldots, t_n, t) \chi_{\{ \max ~t_i < t \}} = f_n(t_1, \ldots, t_n, t)
+$$
+
+Since the sequence of deterministic functions in the Wiener-Itô chaos expansion is unique, the proof is finished.
+\end{proof}
+
+\begin{theorem}
+Suppose that $u(t)$ is measurable and $\mathbb{F}$-adapted and 
+$$
+\mathbb{E} \left[ \int_0^T u^2(t) ~\mathrm{d}t \right] < \infty
+$$
+Then $u(t) \in \text{Dom}(\delta)$ and the Itô and Skorohod integrals coincide.
+\end{theorem}
+
+\begin{proof}
+Write the Chaos expansion of $u(t)$ and apply the Lemma \ref{lm:202309051608} to simplify.
+
+Using the Lemma again, compute  
+$$
+\| \hat{f}_n \|_{L^2([0,T]^{n+1})}^2 = \frac{1}{n+1} \int_0^T \| f_n(\cdot, t) \|_{L^2([0,T]^n)}^2 ~\mathrm{d}t 
+$$
+
+Show that $u \in \text{Dom}(\delta)$ using the \hyperref[thm:chaos-expansion]{Wiener Itô Chaos Expansion} and the \hyperref[rmk:202309060706]{Remark about Skorohod Integrability}:
+$$
+\sum_{n=0}^\infty (n+1)! \| \hat{f}_n \|_{L^2([0,T]^{n+1})}^2 = \mathbb{E} \left[ \int_0^T u^2(t) ~\mathrm{d}t \right] < \infty
+$$
+
+Finally, by the Chaos Expansion and using symmetrization, compute
+$$
+\int_0^T u(t)~\mathrm{d}W(t) = \sum_{n=0}^\infty \int_0^T I_n(f_n(\cdot, t)) ~\mathrm{d}W(t) = \sum_{n=0}^\infty I_{n+1}(\hat{f}_n) = \int_0^T u(t) ~\delta W(t)
+$$
+\end{proof}

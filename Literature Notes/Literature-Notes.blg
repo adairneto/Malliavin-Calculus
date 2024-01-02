@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2023/Arch Linux)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: Literature-Notes.aux
+A level-1 auxiliary file: Chapters/Chaos-Expansion.aux
+A level-1 auxiliary file: Chapters/The_Skorohod_Integral.aux
+A level-1 auxiliary file: Chapters/Malliavin_Derivative.aux
+The style file: alpha.bst
+Database file #1: Literature-Notes.bib
+You've used 4 entries,
+            2543 wiz_defined-function locations,
+            584 strings with 5132 characters,
+and the built_in function-call counts, 1355 in all, are:
+= -- 123
+> -- 60
+< -- 3
++ -- 19
+- -- 19
+* -- 89
+:= -- 238
+add.period$ -- 12
+call.type$ -- 4
+change.case$ -- 20
+chr.to.int$ -- 4
+cite$ -- 4
+duplicate$ -- 61
+empty$ -- 106
+format.name$ -- 25
+if$ -- 269
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 7
+newline$ -- 23
+num.names$ -- 12
+pop$ -- 30
+preamble$ -- 1
+purify$ -- 27
+quote$ -- 0
+skip$ -- 45
+stack$ -- 0
+substring$ -- 53
+swap$ -- 5
+text.length$ -- 3
+text.prefix$ -- 2
+top$ -- 0
+type$ -- 20
+warning$ -- 0
+while$ -- 12
+width$ -- 6
+write$ -- 52
