@@ -1,12 +1,12 @@
 \documentclass[12pt,a4paper,twoside]{report}
-\input{../LaTeX_Template/preamble.tex}
+\input{../LaTeX_Template/preamble_basic.tex}
 
 % Title
 \author{\sffamily \href{https://github.com/adairneto}{Adair Antonio da Silva Neto}}
 \title{\sffamily \uppercase{Malliavin Calculus}}
 \date{\sffamily \today}
 
-% Setup
+% SetucopeFuzzyCommandSearccopeFuzzyCommandSearch))
 \hypersetup{
     pdftitle={Malliavin Calculus},
 }
@@ -19,11 +19,20 @@
 \thispagestyle{empty}
 \setcounter{page}{1}
 
+
+\chapter*{Preface}
+
+These notes are being written as a part of my Undergraduate Research on `Malliavin Calculus with Applications to Finance'. My previous notes, covering the basics of Stochastic Differential Equations up to Applications in Option Pricing, are available at \cite{Silva23stochastic}.
+
 \include{Chapters/Chaos-Expansion}
 \include{Chapters/The_Skorohod_Integral.tex}
 \include{Chapters/Malliavin_Derivative.tex}
+\include{Chapters/Integral-Representations-Clark-Ocone}
+\include{Chapters/White-Noise-Wick}
+\include{Chapters/Hida-Malliavin}
+\include{Chapters/Application-Finance}
 
-\nocite{*}
+%\nocite{*}
 \bibliographystyle{alpha}
 \bibliography{Literature-Notes.bib}
 \addcontentsline{toc}{chapter}{References}
