@@ -1,0 +1,513 @@
+\chapter{White Noise, the Wick Product, and Stochastic Integration}
+
+In this chapter, we formalize the White Noise, and, using it, we can construct the Brownian motion. After that, we obtain a useful rewriting of the Wiener-Itô Chaos Expansion.
+
+An important concept here is that of Wick Product. We present the construction, some properties, the Hermite transform, and how it relates to iterated integrals and Skorohod integration.
+
+\section{White Noise}
+
+Consider $\mathcal{S}(\R^d)$ the \textbf{Schwartz space}, i.e., the space of smooth $\mathcal{C}^\infty(\R^d)$ functions whose derivatives are rapidly decreasing. This is a Fréchet space\footnote{Fréchet spaces generalize Banach spaces. A Fréchet space is a topological vector space that is locally convex, and the topology is induced by a complete invariant metric $\mathrm{d}$ (i.e., it is metrizable and complete).} under the seminorms:
+\[
+  \| f \|_{K, \alpha} = \sup_{x \in \R^d} \left\{ (1 - |x|^k)|\partial^\alpha f(x)| \right\}
+\]
+where $K \in \N_0$, and $\alpha = (\alpha_1, \ldots, \alpha_d)$ is a multi-index with each $\alpha_ 1 \in \N_0$, and 
+\[
+  \partial^\alpha f(x) = \frac{\partial^{|\alpha|}}{\partial \alpha_1 \cdots \partial \alpha_d} f(x), \quad |\alpha| = \alpha_1 + \cdots + \alpha_d
+\]
+
+And let $\mathcal{S}'(\R^d)$ be its dual, i.e., the space of \textbf{tempered distributions}. Using the weak-$\ast$ topology\footnote{The smallest topology that makes every $x \in X$ continuous on $X^\ast$.}, we denote by $\mathcal{B}$ the family of Borel subsets of this space. 
+
+For $\omega \in \mathcal{S}'$ and $\varphi \in \mathcal{S}$, we use
+\[
+\omega(\varphi) = \langle \omega, \varphi \rangle
+\]
+to denote the action of $\omega$ in $\varphi$.
+
+\begin{example}
+If $\omega$ is a measure $\mu$ on $\R^d$, then 
+\[
+\langle \omega, \varphi \rangle = \int_{\R^d} \varphi(x) ~\mathrm{d}\mu(x)
+\]
+\end{example}
+
+Now, let us consider the one-dimensional case. By the Bochner-Minlos-Sazonov theorem (\cite{gelfand1964}[Theorem 2, Page 155]), there exists a probability measure $\P$ on $(\mathcal{S}', \mathcal{B})$ such that
+\[
+\int_{\mathcal{S}'} e^{i \langle \omega, \varphi \rangle} ~\P(\mathrm{d}\omega) = e^{\frac{-1}{2} \|\varphi\|^2}, \quad \varphi \in \mathcal{S}
+\]
+where we used the norm $\|\varphi\| = \|\varphi\|_{L^2(\R)}$.
+
+The measure $\P$ obtained above is called the \textbf{white noise probability measure} and the space $(\mathcal{S}', \mathcal{B}, \P)$ is called the \textbf{white noise probability space}.
+  
+\begin{definition}[Smoothed white noise process]
+We define the (smoothed) white noise process as the measurable map
+\begin{equation*}
+\begin{aligned}
+w : \mathcal{S} \times \mathcal{S}' &\longrightarrow \R \\
+(\omega, \varphi) &\longmapsto \langle \omega, \varphi \rangle
+\end{aligned}
+\end{equation*} 
+We'll also use an alternative notation $w_\varphi = w(\varphi, \omega)$.
+\end{definition}  
+  
+Using the smoothed white noise process $w_\varphi$, we can construct a Wiener process $W(t)$ for $t \in \R$ as follows:
+
+1. Notice that we have the next isometry\footnote{This is Itô's isometry}
+\begin{equation}\label{eq:222404221615}
+\int_{\mathcal{S}'} \langle \omega, \varphi \rangle^ 2 ~\P(\mathrm{d}\omega) = \E[w_\varphi^2] = \| \varphi \|^2
+\end{equation}
+
+2. Use the previous step to extend $\langle \omega, \psi \rangle$ to arbitrary functions $\psi \in L^2(\R)$, by taking $\langle \omega, \psi \rangle = \lim \langle \omega, \varphi_n \rangle$, where $\varphi_n \in \mathcal{S}$ and $\varphi_n \to \psi$ in $L^2(\R)$.
+
+3. Define $\widetilde{W}(t, \omega) = \langle \omega, \chi_{[0,t]} \rangle$ using the step two.
+
+4. Use Kolmogorov's continuity theorem to obtain a continuous version $W(t)$ of $\widetilde{W}(t)$, i.e., $\P(W(t) = \widetilde{W}(t)) = 1$.
+
+Notice that there is a relationship between the smoothed white noise $w_\varphi$ and the Wiener process $W(t)$:
+\[
+w_\varphi(\omega) = \int_\R \varphi(t) ~\mathrm{d}W(t)
+\]
+
+\section{Revisiting the Wiener-Itô Chaos Expansion}
+
+Recalling the definition of the \hyperref[hermite-polynomials]{Hermite polynomial}, in this section we find an orthogonal basis for $L^2(\P)$, which gives us another version of the \hyperref[thm:chaos-expansion]{Wiener-Itô Chaos Expansion}.
+
+To start, we need some definitions.
+
+\begin{definition}
+The $k$th \textbf{Hermite function} is 
+\[
+e_k(x) = \pi^{-\frac{1}{4}}((k-1)!)^{-\frac{1}{2}} e^{-\frac{1}{2} x^2} h_{k-1}(\sqrt{2} x)
+\]
+
+To simplify our notation, let
+\[
+\theta_k(\omega) = \langle \omega, e_k \rangle = \int_\R e_k(x) ~\mathrm{d}W(x)
+\]
+and, finally,
+\[
+H_\alpha(\omega) = \prod_{j=1}^m h_{\alpha_j} (\theta_j(\omega)), \quad H_0 = 1
+\]
+where $\alpha = (\alpha_1, \ldots, \alpha_m) \in \mathcal{I}$, $\alpha \neq 0$, and $\mathcal{I}$ is the set of finite multi-indices $\alpha$.
+\end{definition}
+
+An Itô result states that
+\begin{equation}\label{eq:202405131753}
+I_m(e^{\hat{\otimes} \alpha}) = H_\alpha
+\end{equation}
+
+\begin{example}
+If $e^{(k)} = (0, \ldots, 0, 1, 0, \ldots, 0)$, with $1$ in the $k$th coordinate, then
+\[
+H_{\varepsilon^{(k)}}(\omega) = h_1(\theta_k(\omega)) = \langle \omega, e_k \rangle
+\]
+\end{example}
+
+\begin{remark}
+The family $\{ e_k \}$ constitute an orthonormal basis for $L^2(\R)$ and $e_k \in \mathcal{S}(\R)$ for all $k$. Moreover, the family of $H_\alpha(\omega)$ forms an orthogonal basis for $L^2(\P)$.
+\end{remark}
+
+Using the latter fact, we have a different version of Wiener-Itô Chaos Expansion.
+
+\begin{theorem}[Wiener-Itô Chaos Expansion 2]\label{thm:chaos-exp-2}
+The family ${H_\alpha(\omega)}_{\alpha \in \mathcal{I}}$ forms an orthogonal basis of $L^2(\P)$, i.e., for all $\mathcal{F}_T$-measurable $X \in L^2(\P)$, there exist uniquely determined $c_\alpha \in \R$ such that 
+\[
+X = \sum_{\alpha \in \mathcal{I}} c_\alpha H_\alpha
+\]
+
+Furthermore, 
+\[
+	\| X \|_{L^2(\P)}^2 = \sum_{\alpha \in \mathcal{I}} \alpha! c_\alpha^2
+\]
+where $\alpha! = \alpha_1! \cdots \alpha_m!$.
+\end{theorem}
+
+\begin{proof}
+	See, e.g., \cite{holden1996stochastic}[Theorem 2.2.4]. 
+\end{proof}
+
+\begin{example}[Chaos Expansion of the Wiener process]
+	\begin{equation*}
+		\begin{aligned}
+			W(t) &= \int_\R \chi_{[0,t]}(s) ~\mathrm{d}W(s) \\
+					 &= \int_\R \sum_k \langle \chi_{[0,t]}(s), e_k \rangle_{L^2(\R)} e_k(s) ~\mathrm{d}W(s) \\
+					 &= \sum_k \int_0^t e_k(y) ~\mathrm{d}y \int_\R e_k(s) ~\mathrm{d}W(s) \\
+					 &= \sum_k \int_0^t e_k(y) ~\mathrm{d}y ~ H_{\varepsilon^{(k)}}
+		\end{aligned}
+	\end{equation*}
+\end{example}
+
+How does the current version of the Wiener-Itô Chaos Expansion compare with the \hyperref[thm:chaos-expansion]{previous one}? It is possible to connect these two expansions using the following `translation':
+\begin{equation}\label{eq:202405131754}
+f_n = \sum_{\alpha \in \mathcal{I} : | \alpha | = m} c_\alpha e_1^{\otimes \alpha_1} \hat{\otimes} \cdots \hat{\otimes} e_m^{\otimes \alpha_m}
+\end{equation}
+
+\subsection*{Hida Stochastic Test Functions and Stochastic Distributions, Kondratiev Spaces}
+
+Now we define some useful terminology for growth conditions. For a more in-depth approach, refer to \cite{holden1996stochastic}.
+
+We'll need the following notation. 
+\[
+	(2\N)^\alpha = \prod_{j=1}^m (2j)^{\alpha_j}
+\]
+
+\begin{definition}[Hida test function and distribution spaces, Kondratiev Spaces]
+
+	~\begin{enumerate}
+	\item A function $f = \sum_{\alpha \in \mathcal{I}} a_\alpha H_\alpha \in L^2(\P)$ is in the \textbf{Hida test function Hilbert space} $(\mathcal{S})_k$, for $k \in \R$, if \[ \| f \|_k^2 = \sum_{\alpha \in \mathcal{I}} \alpha! a_\alpha^2 (2\N)^{\alpha k} < \infty \] 
+		The \textbf{Hida test function space} $(\mathcal{S})$ is the space 
+		\[
+			(\mathcal{S}) = \bigcap_{k \in \R} (\mathcal{S})_k
+		\]
+		equipped with the projective topology.
+
+	\item A formal sum $F = \sum_{a \mathcal{I}} b_\alpha H_\alpha$ belongs to the \textbf{Hida distribution Hilbert space} $(\mathcal{S})_{-q}$ is 
+		\[
+			\| F \|_{-q}^2 = \sum_{\alpha \in \mathcal{I}} \alpha! c_\alpha^2 (2\N)^{-\alpha q} < \infty 
+		\]
+		The \textbf{Hida distribution space} $(\mathcal{S})^\ast$ is the space
+		\[
+			(\mathcal{S})^\ast = \bigcup_{q \in \R} (\mathcal{S})_{-q}
+		\]
+		equipped with the inductive topology. 
+
+	\item If $F = \sum_{\alpha \in \mathcal{I}} b_\alpha H_\alpha \in (\mathcal{S})^\ast$, the \textbf{generalized expectation} of $F$ is 
+		\[
+			\E[F] = b_0
+		\]
+		
+	\item The \textbf{Kondratiev test function space} $(S)_1$ is the projective limit of Hilbert spaces $(S)_{1,q}$, $q \ge 0$. For $q \ge 0$, $(S)_{-1, q}$ consists of the formal sums
+	\[
+	f = \sum_{\alpha \in J} a_\alpha H_\alpha	
+	\]
+	such that
+	\[
+	\| f \|_{1, q}^2 = \sum_{\alpha \in J} a_\alpha^2 (2 \N)^{\alpha q} < \infty 
+	\]
+
+	\item The \textbf{Kondratiev distribution space} $(S)_{-1}$ is defined as the inductive limit of the Hilbert spaces $(S)_{-1, q}$, $q \ge 0$. For $q \ge 0$, $(S)_{-1, q}$ consists of the chaos expansions 
+	\[
+	F = \sum_{\alpha \in J} c_\alpha H_\alpha
+	\]
+	such that 
+	\[
+	\| F \|_{-1, q}^2 = \sum_{\alpha \in J} c_\alpha^2 (2 \N)^{-\alpha q} < \infty 
+	\]
+	\end{enumerate}
+\end{definition}
+
+\begin{remark}
+First, notice that $(\mathcal{S})^\ast$ is the dual of $(\mathcal{S})$, and $(S)_{-1}$ is the dual of $(S)_1$.
+
+The action of $F$ on $f$ (as defined above) is given by
+\[
+	\langle F, f \rangle = \sum_{\alpha} \alpha! a_\alpha b_\alpha
+\]
+
+Furthermore, we have the inclusions below
+\[
+	(\mathcal{S}) \subset (\mathcal{S})_k \subset L^2(\P) \subset (\mathcal{S})_{-q} \subset (\mathcal{S})^\ast, \quad \forall~k, q
+\]
+and 
+\[
+(S)_1 \hookrightarrow (S) \hookrightarrow L^2(S) \hookrightarrow (S)^* \hookrightarrow (S)_{-1}
+\]
+\end{remark}
+
+\begin{example}
+The smoothed white noise $w_\varphi \in (\mathcal{S})$ if $\varphi \in \mathcal{S}(\R)$.
+\end{example}
+
+\begin{example}
+The \textbf{singular (pointwise) white noise} $\stackrel{\bullet}{W}(t)$ is defined as
+\[
+\stackrel{\bullet}{W}(t) = \sum_k e_k(t) H_{\varepsilon^{(k)}}
+\]
+
+Using the isometry \eqref{eq:222404221615}, 
+\[
+\frac{d}{d t} W(t)=\frac{d}{d t} \sum_k\left(\int_0^t e_k(y) ~\mathrm{d} y\right) H_{\varepsilon^{(k)}}=\stackrel{\bullet}{W}(t)
+\]
+with derivative in $(\mathcal{S})^*$.
+
+%Using (5.18) one can verify that $\stackrel{\bullet}{W}(t) \in(\mathcal{S})^*$ for all $t$, as follows. We have
+%$$
+%\|\dot{W}(t)\|_{-q}^2=\sum_{k=0}^{\infty} e_k^2(t) \epsilon^{(k)} !\left((2 \N)^{\epsilon^{(k)}}\right)^{-q}=\sum_{k=0}^{\infty} e_k^2(t)(2 k)^{-q}<\infty, \quad q \geq 2
+%$$
+%because
+%$$
+%\sup _{t \in \R}\left|e_k(t)\right|=\mathcal{O}\left(k^{-1 / 12}\right)
+%$$
+\end{example}
+
+\section{The Wick Product}
+
+With the previous version of the Wiener-Itô Chaos Expansion, we define the Wick product in this section, which generalizes the ordinary pointwise product of deterministic calculus. It is the only product that is specified for the singular white noise, it is related to Itô and Skorohod integrals, can be used to obtain strong solutions to SDEs, and is used in quantum field theory for renormalization.
+
+\subsection*{Construction}
+
+Using the \hyperref[thm:chaos-exp-2]{Wiener-Itô Chaos Expansion}, we can define a multiplication between $(\mathcal{S})$ and $(\mathcal{S})^\ast$ in a natural way. We take the chaos expansions of the elements and combine them by multiplying the scalars and summing the indices on $H$.
+
+\begin{definition}[Wick Product]
+	For 
+	\[
+	X = \sum_\alpha a_\alpha H_\alpha \in (\mathcal{S})^\ast  \quad \text{ and } \quad Y = \sum_\beta b_\beta H_\beta \in (\mathcal{S})^\ast
+	\]
+	we define the \textbf{Wick product} of $X$ and $Y$ as
+	\[
+	X \diamond Y = \sum_{\alpha, \beta} a_\alpha b_\beta H_{\alpha + \beta} = \sum_{\gamma} \left( \sum_{\alpha + \beta = \gamma} a_\alpha b_\beta \right) H_\gamma
+	\]
+\end{definition}
+
+%\begin{example}
+%
+%\end{example}
+%
+%\begin{example}
+%
+%\end{example}
+
+The Wick product is commutative, associative, and distributive (concerning addition). It is also closed in the following sense. If $X, Y \in (\mathcal{S})^\ast$, then their product is also in $(\mathcal{S})^\ast$. And if $X, Y \in (\mathcal{S})$, then $X \diamond Y \in (\mathcal{S})$.
+
+We define the \textbf{Wick exponential} naturally as
+\[
+\exp^\diamond X = \sum_{n=0}^\infty \frac{X^{\diamond n}}{n!}
+\]
+
+An important property is that the expected value of the Wick product is simply the product of the expected values, i.e., \[ \E [X \diamond Y] = \E[X] \E[Y] \] By induction, it follows that 
+\[
+\E [\exp^\diamond X] = \exp \E [X]
+\]
+
+\subsection*{Hermite Transform}
+
+Now, we introduce a tool to transform elements $X \in (\mathcal{S})_{-1}$ into deterministic functions.
+
+\begin{definition}[Hermite transform]
+Let
+\[
+X = \sum_\alpha c_\alpha H_\alpha \in (\mathcal{S})_{-1}
+\]
+
+The \textbf{Hermite transform} of $X$, denoted by $\mathcal{H}X$ or $\widetilde{X}$, is
+\[
+\mathcal{H}X = \sum_\alpha c_\alpha z^\alpha \in \C
+\]
+where $z = (z_1, z_2, \ldots)$ is a $\C$-valued sequence.
+\end{definition}
+
+\begin{theorem}[Absolute convergence of the Hermite transform]
+The \textbf{Hermite transform} is absolutely convergent on the infinite-dimensional neighborhood
+\[
+\mathbf{K}_q(R) = \left\{ (z_1, z_2, \ldots) : \sum_{\alpha \neq 0} |z^\alpha|^2 (2\N)^{q\alpha} < R^2 \right\}
+\]
+for some $0 < q \leq R < \infty$.
+\end{theorem}
+
+\begin{proof}
+\begin{equation*}
+\begin{aligned}
+|\widetilde{X}(z)| &\leq \sum_\alpha |c_\alpha| |z|^\alpha \\
+&\leq \left(\sum_\alpha |c_\alpha|^2 \alpha! (2\N)^{-\alpha q} \right)^{\frac{1}{2}} \left(\sum_\alpha |z^\alpha|^2 (2\N)^{\alpha q} \right)^{\frac{1}{2}} \\
+&\leq \left(\sum_\alpha |c_\alpha|^2 (2\N)^{-\alpha q} \right)^{\frac{1}{2}} \left(\sum_\alpha |z^\alpha|^2 (2\N)^{\alpha q} \right)^{\frac{1}{2}} \\
+&= \| X \|_{-1, q} \left(\sum_\alpha |z^\alpha|^2 (2\N)^{\alpha q} \right)^{\frac{1}{2}}
+\end{aligned}
+\end{equation*}
+\end{proof}
+
+\begin{theorem}[Characterization for $(\mathcal{S})_{-1}$]\label{thm:charac-s-1} \hfill
+
+\begin{enumerate}
+\item Let $X=\sum_\alpha c_\alpha H_\alpha \in(\mathcal{S})_{-1}$. Then there exists some $q, M_q<\infty$ such that
+\[
+|\tilde{X}(z)| \leq \sum_\alpha\left|c_\alpha\right||z|^\alpha \leq M_q\left(\sum_\alpha\left|c_\alpha\right|^2(2 \N)^{\alpha q}\right)^{\frac{1}{2}}
+\]
+for all $z \in \C_c^{\N}$. In particular, $\tilde{X}$ is a bounded (analytic) function on $\mathbf{K}_q(R)$ for all $R<\infty$.
+
+\item Consider
+$
+f(z)=\sum_\alpha b_\alpha z^\alpha
+$
+for coefficients $b_\alpha \in \R$ and $z=(z_1, z_2, \ldots ) \in \mathbf{C}_c^{\N}$ and suppose that 
+\[
+\sum_\alpha\left|b_\alpha\right||z|^\alpha<\infty
+\]
+for all $z \in \mathbf{K}_q(R)$ for some $q<\infty$ and $R>0$.
+
+If we also suppose that 
+$
+\sup _{z \in \mathbf{K}_{\mathrm{q}}(R)}|f(z)|<\infty
+$
+, then there exists a unique distribution $X \in (S)_{-1}$ such that
+$
+\tilde{X}(z)=f(z)
+$
+for all $z \in \mathbf{C}_c^{\N}$, and $X$ has the representation
+\[
+X=\sum_\alpha b_\alpha H_\alpha .
+\]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+See, e.g., \cite{holden1996stochastic}[Theorem 2.6.11].
+\end{proof}
+
+\begin{definition}[Wick version]
+Let $ f : U \longrightarrow \C$ be an analytic function in the neighbordhood $U \subseteq \C$ of $\zeta_0 = \E [X]$, where $X \in (\mathcal{S})_{-1}$. Then we can write
+\[
+f(z) = \sum_{k \ge 0} a_k (z - \zeta_0)^k
+\]
+
+Assuming that $a_k \in \R$, the \textbf{Wick version} of $f$ applied to $X$, which we denote by $f^\diamond(X)$, is the unique element $Y \in (\mathcal{S})_{-1}$ such that 
+\[
+\widetilde{Y}(z) = f(\widetilde{X}(z))
+\]
+on $\mathbf{K}_q(R)$ for some $q < \infty$ and $R > 0$.
+\end{definition}
+
+The existence of the Wick version of analytic functions follows from the theorem \ref{thm:charac-s-1}.
+
+\begin{theorem}[Wick Chain Rule]
+Let 
+\[
+X : \R \longrightarrow (\mathcal{S})_{-1}
+\]
+be continuously differentiable and $f : \C \longrightarrow \C$ analytic on all $\C$ be such that $f(\R) \subseteq \R$. Then, 
+\[
+\frac{d}{dt} f^\diamond(X(t)) = (f')^\diamond(X(t)) \diamond \frac{d}{dt} X(t)
+\]
+\end{theorem}
+
+\begin{proof}[]
+	See \cite{holden1996stochastic}.
+\end{proof}
+
+\subsection*{Wick Product and Iterated Integrals}
+
+\begin{definition}[Spaces $\mathcal{G}$ and $\mathcal{G}^\ast$]
+	\begin{enumerate}
+		\item Let $\lambda \in \R$. The space $\mathcal{G}_\lambda$ consists of the formal expansions 
+			\[ X = \sum_{n=0}^\infty \int_{\R^n} f_n ~\mathrm{d}W^{\otimes n} \] such that \[ \| X \|_{\mathcal{G}_\lambda} = \left( \sum_{n=0}^\infty n! e^{2 \lambda n} \| f_n \|_{L^2(\R^n)}^2 \right)^{1/2} < \infty \]
+
+			For each $\lambda \in \R$, the space $\mathcal{G}_\lambda$ is a Hilbert space with the inner product 
+			\[ \langle X, Y \rangle_{\mathcal{G}_\lambda} = \sum_{n=0}^\infty n! e^{2 \lambda n} \langle f_n, g_n \rangle_{L^2(\R^n)} \]
+			where $Y = \sum_{n=0}^\infty \int_{\R^n} g_n ~\mathrm{d}W^{\otimes n}$.
+
+			Note that if $\lambda_1 < \lambda_2$, then $G_{\lambda_2} \subseteq G_{\lambda_1}$. We define 
+			\[ \mathcal{G} = \bigcap_{\lambda \in \R} G_\lambda = \bigcap_{\lambda > 0} G_\lambda \] with the projective limit topology. 
+
+		\item We define the \textbf{space of stochastic distributions} $\mathcal{G}^\ast$ as the dual of $\mathcal{G})$, i.e.,
+			\[ \mathcal{G}^\ast = \bigcup_{\lambda \in \R} \mathcal{G}_\lambda = \bigcup_{\lambda < 0} \mathcal{G}_\lambda \] with the inductive limit topology.
+	\end{enumerate}
+\end{definition}
+
+Using the spaces $\mathcal{G}$ and $\mathcal{G}^\ast$, we have the following result.
+
+\begin{theorem}
+Suppose $X=\sum_{n=0}^{\infty} I_n(f_n) \in \mathcal{G}^*$ and $Y=\sum_{m=0}^{\infty} I_m(g_m) \in \mathcal{G}^*$.
+Then we can write the Wick product of $X$ and $Y$ as
+$$
+X \diamond Y=\sum_{n, m=0}^{\infty} I_{n+m}(f_n \widehat{\otimes} g_m)=\sum_{k=0}^{\infty}\left(\sum_{n+m=k} I_k(f_n \widehat{\otimes} g_m)\right) .
+$$
+\end{theorem}
+
+From this result, it follows that, for $g \in L^2(\R)$,
+\[
+	\left( \int_\R g(t) ~\mathrm{d}W(t) \right)^{\diamond n} = I_n (g^{\otimes n})
+\]
+
+%\begin{example}
+%For the deterministic functions $f, g \in L^2(\R)$, using integration by parts we have
+%$$
+%\begin{aligned}
+%& \left(\int_{\R} f(x) ~\mathrm{d} W(x)\right) \diamond\left(\int_{\R} g(y) ~\mathrm{d} W(y)\right)=\int_{\R^2}(f \widehat{\otimes} g)(x, y) ~\mathrm{d} W^{\otimes 2} \\
+%& =\int_{\R} \int_{-\infty}^y(f(x) g(y)+f(y) g(x)) ~\mathrm{d} W(x) ~\mathrm{d} W(y) \\
+%& =\int_{\R} g(y) \int_{-\infty}^y f(x) ~\mathrm{d} W(x) ~\mathrm{d} W(y)+\int_{\R} f(y) \int_{-\infty}^y g(x) ~\mathrm{d} W(x) ~\mathrm{d} W(y) \\
+%& =\left(\int_{\R} f(x) ~\mathrm{d} W(x)\right)\left(\int_{\R} g(y) ~\mathrm{d} W(y)\right)-\int_{\R} f(t) g(t) ~\mathrm{d} t .
+%\end{aligned}
+%$$
+%
+%By the theorem,
+%$$
+%\left(\int_{\R} g(t) ~\mathrm{d} W(t)\right)^{\diamond n} = I_n(g^{\otimes n}), \quad g \in L^2(\R) .
+%$$
+%
+%\textcolor{red}{FINISH EXAMPLE.}
+%\end{example}
+
+\subsection*{Wick Product and Skorohod Integration}
+
+\begin{definition}[$(\mathcal{S})^*$-integrable]
+A function  $Y : \R \longrightarrow (\mathcal{S})^\ast$ is $(\mathcal{S})^\ast$-integrable if 
+\[
+\langle Y(t), f \rangle \in L^1(\R), \quad \forall~f \in (\mathcal{S})
+\]
+
+The $(\mathcal{S})^\ast$-integral of $Y$, $\int_\R Y(t)~\mathrm{d}t$ is the unique element in $(\mathcal{S})^\ast$ such that 
+\[
+\left\langle \int_\R Y(t)~\mathrm{d}t, f \right\rangle = \int_\R \langle Y(t), f \rangle ~\mathrm{d}t, \quad \forall~f \in (\mathcal{S})
+\]
+\end{definition}
+
+\begin{theorem}\label{thm:202406051614}
+If $Y(t)$ is Skorohod integrable, then $Y(t) \diamond \stackrel{\bullet}{W}$ is $(\mathcal{S})^*$-integrable and
+\begin{equation}
+\int_\R Y(t) ~\delta W(t) = \int_\R Y(t) \diamond \stackrel{\bullet}{W} ~\mathrm{d}t
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The idea of the proof is to write the Chaos expansion of $Y(t)$, replace it on both sides of the desired equation, and compare.
+
+Since $L^2(\P) \subseteq (\mathcal{S})^\ast$, we can write
+\[
+Y(t) = \sum_{\alpha \in \mathcal{I}} c_\alpha(t) H_\alpha = \sum_{n=0}^\infty I_n (f_n(\cdot, t))
+\]
+
+The right-hand side of the equation equals 
+\[
+\int_\R \left( \sum_{\alpha \in \mathcal{I}} c_\alpha(t) H_\alpha \right) \diamond \left( \sum_{k} e_k(t) H_{\varepsilon^{(k)}} \right) ~\mathrm{d}t = \sum_{\alpha, k} \langle c_\alpha, e_k \rangle_{L^2(\R)} H_{\alpha + \varepsilon^{(k)}}
+\]
+
+While the left-hand side is 
+\begin{equation*}
+\begin{aligned}
+\int_{\R} Y(t) \delta W(t) & =\int_{\R} \sum_{n=0}^{\infty} I_n (f_n(\cdot, t)) ~\delta W(t) \\
+& =\sum_{n=0}^{\infty} \int_{\R} I_n \left( \sum_{|\alpha| = n} c_\alpha(t) e^{\hat{\otimes} \alpha} \right) ~\delta W(t) \\
+& =\sum_{n=0}^{\infty} \int_{\R} I_n \left(\sum_{|\alpha|=n} \sum_{k=1}^{\infty} \langle c_\alpha, e_k \rangle_{L^2(\R)} e_k(t) e^{\hat{\otimes} \alpha}\right) ~\delta W(t) \\
+& =\sum_{n=0}^{\infty} I_{n+1}\left(\sum_{|\alpha|=n} \sum_{k=1}^{\infty} \langle c_\alpha, e_k \rangle_{L^2(\R)} (e^{\hat{\otimes} \alpha} \hat{\otimes} e_k)\right) \\
+& =\sum_{n=0}^{\infty} \sum_{|\alpha|=n} \sum_{k=1}^{\infty} \langle c_\alpha, e_k \rangle_{L^2(\R)} I_{n+1} (e^{\hat{\otimes} (\alpha+\epsilon^{(k)})}) \\
+& =\sum_{\alpha, k} \langle c_\alpha, e_k \rangle_{L^2(\R)} H_{\alpha+\epsilon^{(k)}} .
+\end{aligned}
+\end{equation*}
+where we used \eqref{eq:202405131753} and \eqref{eq:202405131754}.
+\end{proof}
+
+This theorem motivates the following. 
+
+\begin{definition}[Generalized Skorohod Integral]
+Let $Y$ be an $(\mathcal{S})^\ast$-valued process satisfying
+\[
+\int_\R Y(t) \diamond \stackrel{\bullet}{W}(t) ~\mathrm{d}t \in (\mathcal{S})^\ast
+\]
+
+This integral is called the \textbf{generalized Skorohod integral} of $Y$.
+\end{definition} 
+
+%\begin{corollary}
+%
+%\end{corollary}
+%
+%\begin{definition}[Generalized Skorohod Integral]
+%
+%\end{definition}
+%
+%Some properties of this integral.
+%
+%\begin{lemma}
+%
+%\end{lemma}
+%
+%\begin{theorem}
+%
+%\end{theorem}

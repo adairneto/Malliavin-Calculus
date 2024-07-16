@@ -1,0 +1,550 @@
+\chapter{Stochastic Integral Representations}
+
+Given a random variable $F \in L^2(\P)$, how can we represent it as a stochastic integral? The \hyperref[clark-ocone]{Clark-Ocone formula} gives this representation using the Malliavin derivative. After presenting it, we discuss a \hyperref[co-change-measure]{generalization} and, then, two applications in Finance: \hyperref[portfolio-selection]{Portfolio Selection} and \hyperref[sensitivity-analysis]{Sensitivity Analysis}. 
+
+\section{The Clark-Ocone Formula}\label{clark-ocone}
+
+Recalling the Itô Representation Theorem \cite[Theorem 4.3.3]{oksendal2013stochastic}, the following makes explicit the stochastic process that appears inside the integral. 
+
+\begin{theorem}[The Clark-Ocone Formula]\label{thm:clark-ocone}
+	Let $F \in \mathbf{D}_{1,2}$ be $\mathcal{F}_T$-measurable. Then
+	\begin{equation}
+		F = \E[F] + \int_0^T \E[D_t F \mid \mathcal{F}_t] ~\mathrm{d}W(t)
+	\end{equation}
+\end{theorem}
+
+\begin{proof}
+	The idea is to write the Chaos Expansion of $F$ and compute the integral on the right hand side using the proposition \ref{prop:202310311509}.
+
+	Let 
+	\[
+		F = \sum_{n=0}^\infty I_n(f_n)
+	\]
+	be the Wiener-Itô chaos expansion of $F$. Then 
+
+	\begin{equation}
+		\begin{aligned}
+			\int_0^T \E[D_t F \mid \mathcal{F}_t] ~\mathrm{d}W(t) &= \int_0^T \E \left[ D_t \left. \sum_{n=0}^\infty I_n(f_n) ~\right|~ \mathcal{F}_t \right] ~\mathrm{d}W(t) \\
+										      &= \int_0^T \E \left[ \left. \sum_{n=1}^\infty n I_{n-1}(f_n(\cdot, t)) ~\right|~ \mathcal{F}_t \right] ~\mathrm{d}W(t) \\
+										      &= \int_0^T \sum_{n=1}^\infty n \E \left[ I_{n-1}(f_n(\cdot, t)) \mid \mathcal{F}_t \right] ~\mathrm{d}W(t)
+		\end{aligned}
+	\end{equation}
+	
+	Using \ref{prop:202310311509}, we have
+
+	\begin{equation}
+		\begin{aligned}
+			\int_0^T \sum_{n=1}^\infty n \E \left[ I_{n-1}(f_n(\cdot, t)) \mid \mathcal{F}_t \right] &~\mathrm{d}W(t) = \int_0^T \sum_{n=1}^\infty n I_{n-1}(f_n(\cdot, t) \chi_{[0,t]}^{\otimes (n-1)}(\cdot)) ~\mathrm{d}W(t) \\
+			&= \int_0^T \sum_{n=1}^\infty n (n-1)! J_{n-1}(f_n(\cdot, t) \chi_{[0,t]}^{\otimes (n-1)}(\cdot)) ~\mathrm{d}W(t) \\
+			&= \sum_{n=1}^\infty n! J_{n}(f_n) = \sum_{n=1}^\infty I_{n}(f_n) \\
+			&= \sum_{n=0}^\infty I_{n}(f_n) - I_0(f_0) = F - \E[F]
+		\end{aligned}
+	\end{equation}
+\end{proof}
+
+As a corollary, we get a simpler proof for the \hyperref[thm:duality_formula]{duality formula} in the case that $u$ is $\mathbf{F}$-adapted. 
+
+\begin{corollary}[Duality Formula]\label{cor:duality-formula}
+	Suppose that $F \in \mathbf{D}_{1,2}$ is $\mathcal{F}_T$-measurable, $u$ is an $\mathbf{F}$-adapted process, and
+	\[
+		\E\left[ \int_0^T u^2(t) ~\mathrm{d}t \right] < \infty
+	\]
+	
+	Then 
+	\begin{equation}
+		\E\left[ F \int_0^T u(t) ~\mathrm{d}W(t) \right] = \E\left[ \int_0^T u(t) D_t F ~\mathrm{d}t \right]
+	\end{equation}
+\end{corollary}
+
+\begin{proof}
+	Replacing $F$ using the Clark-Ocone formula and applying Itô isometry,
+		\begin{equation}
+		\begin{aligned}
+			\E\left[ F \int_0^T u(t) ~\mathrm{d}W(t) \right] &= \E\left[ \left( \E[F] + \int_0^T \E[D_t F \mid \mathcal{F}_t] ~\mathrm{d}W(t) \right) \int_0^T u(t) ~\mathrm{d}W(t) \right] \\ 
+			&= \E\left[ \int_0^T u(t) \E[D_t F \mid \mathcal{F}_t] ~\mathrm{d}t \right] \\
+			&= \E\left[ \int_0^T u(t) D_t F ~\mathrm{d}t \right]
+		\end{aligned}
+	\end{equation}
+\end{proof}
+
+\section{Under Change of Measure}\label{co-change-measure}
+
+Before stating the Clark-Ocone formula under change of measure, let us recall the Girsanov theorem and Novikov's criterion. The processes $(u_t)$, $(Z_t)$ and $(\widetilde{W}_t)$ defined in them will be used throughout the section. 
+
+\begin{theorem}[Girsanov]\label{thm:girsanov}
+    Let $(u_t)$ be an adapted process satisfying 
+    \[
+        \int_0^T u_s^2 ~\mathrm{d}s < \infty \text{ a.s. }
+    \]
+    and such that the process $(Z_t)$ given by 
+    \[
+        Z_t = \exp \left(-\int_0^t u_s ~\mathrm{d}W_s - \frac{1}{2} \int_0^t u_s^2 ~\mathrm{d}s \right)
+    \] 
+    is a martingale. 
+
+    Then, under the probability $\P^Z$ with density $Z_T$ with respect to $\P$, the process $(\widetilde{W}_t)$ defined by
+    \[
+        \widetilde{W}_t = W_t + \int_0^t u_s ~\mathrm{d}s
+    \]
+    is an $(\mathcal{F}_t)$-Brownian motion. 
+\end{theorem}
+
+\begin{proof}
+    \cite[Theorem 5.2.3]{shreve2004stochastic}.
+\end{proof}
+
+\begin{remark}[Novikov's criterion]
+    If 
+    \[
+        \E\left[ \exp \left( \frac{1}{2} \int_0^T u_t^2 ~\mathrm{d}t \right)\right] < \infty
+    \]
+    then the $(Z_t)$ in Girsanov theorem is a martingale.
+\end{remark}
+
+Our goal in this section is to prove the following. 
+
+\begin{theorem}[Clark-Ocone Formula Under Change of Measure]\label{thm:clark-ocone-change-measure}
+Suppose that $F \in \mathbf{D}_{1,2}$ is $\mathcal{F}_T$-measurable, and that the following conditions are met
+\begin{enumerate}
+	\item $\E_Q[|F|] < \infty$;
+	\item $\E_Q \left[ \int_0^T |D_t F|^2 ~\mathrm{d}t \right] < \infty$;
+	\item $\E_Q \left[ |F| \int_0^T \left( \int_0^T D_t u(s) ~\mathrm{d}W(s) + \int_0^T u(s) D_t u(s) ~\mathrm{d}s \right)^2 ~\mathrm{d}t \right] < \infty$. 
+\end{enumerate}
+
+Then
+\begin{equation*}
+	F = \E_Q[F] + \int_0^T \E_Q \left[ \left( D_t F - F \left. \int_t^T D_t u(s) ~\mathrm{d}\widetilde{W}(s) \right) ~ \right|~  \mathcal{F}_t \right] ~\mathrm{d}\widetilde{W}(t)
+\end{equation*}
+
+\end{theorem}
+
+To prove it, we'll use a couple of lemmas. 
+
+\begin{lemma}[Bayes rule]
+	Let $\mu$ and $\nu$ be two probability measures on a measurable space $(\Omega, \mathcal{G})$ such that 
+\[
+	\nu(d \omega) = f(\omega) \mu(d \omega)
+\]
+for some $f \in L^1(\mu)$. Suppose that $X$ is a random variable in the same measurable space such that $X \in L^1(\nu)$ and that $\mathcal{H} \subset \mathcal{G}$ is a $\sigma$-algebra. Then 
+\begin{equation}
+	\E_\nu [X \mid \mathcal{H}] \E_\mu [f \mid \mathcal{H}] = \E_\mu [f X \mid \mathcal{H}]
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+
+	By the definition of conditional expectation, if $H \in \mathcal{H}$, then 
+	\begin{equation}
+	\begin{aligned}
+		\int_H \E_\nu [X \mid \mathcal{H}] ~f\mathrm{d}\mu &= \int_H \E_\nu [X \mid \mathcal{H}] ~\mathrm{d}\nu = \int_H X ~\mathrm{d}\nu \\
+									   &= \int_H X ~f\mathrm{d}\mu = \int_H \E_\mu [f X \mid \mathcal{H}] ~\mathrm{d}\mu
+	\end{aligned}
+	\end{equation}
+
+	Since $\mathcal{H} \subset \mathcal{G}$, we know that 
+	\[
+		\E[X \mid \mathcal{H}] = \E[\E[X \mid \mathcal{G}] \mid \mathcal{H}]
+	\]
+	Using this fact, 
+	\begin{equation}
+	\begin{aligned}
+		\int_H \E_\nu [X \mid \mathcal{H}] ~f\mathrm{d}\mu &= \E_\mu [\E_\nu[X \mid \mathcal{H}] f \chi_H] \\
+										&= \E_\mu[\E_\mu[\E_\nu[X \mid \mathcal{H}] f \chi_H \mid \mathcal{H}]] \\
+									   &= \E_\mu[\chi_H \E_\nu[X \mid \mathcal{H}] \E_\mu [f \mid \mathcal{H}]] \\
+									   &= \int_H \E_\nu [X \mid \mathcal{H}] \E_\mu [f \mid \mathcal{H}] ~\mathrm{d}\mu 
+	\end{aligned}
+	\end{equation}
+
+	Combining both equations, we have the result.
+\end{proof}
+
+\begin{corollary}\label{cor:202401150945}
+If $G \in L^1(Q)$, then 
+\begin{equation}
+	\E_Q [G \mid \mathcal{F}_t] = \frac{\E[Z(T)G \mid \mathcal{F}_t]}{Z(t)}
+\end{equation}
+\end{corollary}
+
+\begin{lemma}\label{lm:202401151023}
+\begin{equation}
+	D_t(Z(T)F) = Z(T) \left[ D_t F - F \left( u(t) + \int_t^T D_t u(s) ~\mathrm{d}\widetilde{W}(s) \right) \right]
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+	Apply the \hyperref[thm:chain_rule]{chain rule} and the \hyperref[cor:202401111429]{corollary of the fundamental theorem of calculus} to $D_t Z(T)$:
+	
+	\begin{equation*}
+		\begin{aligned}
+		D_t Z(T) & =Z(T)\left[-D_t \int_0^T u(s) ~\mathrm{d} W(s)-\frac{1}{2} D_t \int_0^T u^2(s) ~\mathrm{d} s\right] \\
+		& =Z(T)\left[-\int_t^T D_t u(s) ~\mathrm{d} W(s)-u(t)-\int_0^T u(s) D_t u(s) ~\mathrm{d} s\right] \\
+		& =Z(T)\left[-\int_t^T D_t u(s) ~\mathrm{d} \widetilde{W}(s)-u(t)\right] .
+		\end{aligned}
+	\end{equation*}
+\end{proof}
+
+We're ready to prove Theorem \ref{thm:clark-ocone-change-measure}.
+
+\begin{proof}[Proof of the Theorem \ref{thm:clark-ocone-change-measure}]
+
+Define $Y(t) = \E_Q [F \mid \mathcal{F}_t]$ and $\Lambda(t) = Z^{-1}(t)$. Notice that
+
+\begin{equation*}
+\begin{aligned}
+	\Lambda(t) &= \exp \left(\int_0^t u(s) ~\mathrm{d}W_s + \frac{1}{2} \int_0^t u^2(s) ~\mathrm{d}s \right) \\
+						 &= \exp \left(\int_0^t u(s) ~\mathrm{d}\widetilde{W}_s - \frac{1}{2} \int_0^t u^2(s) ~\mathrm{d}s \right)
+\end{aligned}
+\end{equation*}
+
+Using the corollary \ref{cor:202401150945}, 
+\[
+Y_t = \Lambda(t) \E[Z(T) F \mid \mathcal{F}_t]
+\]
+
+% The idea is to apply the Itô formula to $\Lambda(t)$, Clark-Ocone to the expected value above, and then compute $\mathrm{d}Y(t)$ using the information that we obtained.
+
+Applying the \hyperref[thm:clark-ocone]{Clark-Ocone formula},
+\[
+Y_t = \Lambda(t) \left[ \E[\E[Z(T) F \mid \mathcal{F}_t]] + \int_0^T \E[D_s \E[Z(T) F \mid \mathcal{F}_t] \mid \mathcal{F}_s] ~\mathrm{d}W(s) \right]
+\]
+
+Simplifying and using the proposition \ref{prop:202310311506},
+\[
+Y_t = \Lambda(t) \left[ \E[Z(T) F] + \int_0^T \E[D_s (Z(T) F) \mid \mathcal{F}_s] ~\mathrm{d}W(s) \right] = \Lambda(t) U(t)
+\]
+where we defined
+\[
+U(t) = \E[Z(T) F] + \int_0^T \E[D_s (Z(T) F) \mid \mathcal{F}_s] ~\mathrm{d}W(s)
+\]
+
+Apply Itô formula to $\Lambda(t)$,
+\begin{equation*}
+	\mathrm{d} \Lambda(t) = \Lambda(t) u(t) ~\mathrm{d} \widetilde{W}(t)
+\end{equation*}
+
+By the lemma \ref{lm:202401151023}, using the change of measure and the expression above,
+\begin{equation*}
+\begin{aligned}
+	\mathrm{d} Y(t) &= \Lambda(t) \E\left[D_t(Z(T) F) \mid \mathcal{F}_t\right] \mathrm{d} W(t)+\Lambda(t) u(t) U(t) \mathrm{d} \widetilde{W}(t) \\
+	& +\Lambda(t) u(t) \E \left[D_t(Z(T) F) \mid \mathcal{F}_t\right] \mathrm{d} W(t) \mathrm{d} \widetilde{W}(t) \\
+	& =\Lambda(t) \E \left[D_t(Z(T) F) \mid \mathcal{F}_t\right] \mathrm{d} \widetilde{W}(t)+u(t) Y(t) \mathrm{d} \widetilde{W}(t) \\
+	& =\Lambda(t)\left(\E \left[Z(T) D_t F \mid \mathcal{F}_t\right]- \E \left[Z(T) F u(t) \mid \mathcal{F}_t\right]\right. \\
+	& \left.\left.-\E\left[Z(T) F \int_t^T D_t u(s) ~\mathrm{d} \widetilde{W}(s) ~\right|~ \mathcal{F}_t\right]\right) \mathrm{d} \widetilde{W}(t)+u(t) Y(t) \mathrm{d} \widetilde{W}(t)
+\end{aligned}
+\end{equation*}
+
+Since $Y(T) = \E_Q [F \mid \mathcal{F}_T] = F$ and $Y(0) = \E_Q [F \mid \mathcal{F}_0] = \E_Q [F]$, the result follows.
+
+\end{proof}
+
+\section{Portfolio Selection}\label{portfolio-selection}
+
+Consider a market consisting of a riskless asset $S_0$ with
+\begin{equation}\label{eq:202401171029}
+\text{riskless asset} \quad \begin{cases}
+	\mathrm{d}S_0(t) = \rho(t) S_0(t)~\mathrm{d}t \\
+	S_0(0) = 1
+\end{cases}
+\end{equation}
+and a risky asset $S_1$ satisfying
+\begin{equation}\label{eq:202401171030}
+\text{risky asset} \quad \begin{cases}
+	\mathrm{d}S_1(t) = \mu(t) S_1(t)~\mathrm{d}t + \sigma(t) S_1(t)~\mathrm{d}W(t) \\
+	S_1(0) > 0 
+\end{cases}
+\end{equation}
+where $\rho(t), \mu(t)$, and $\sigma(t) \neq 0$ are $\mathbf{F}$-adapted processes satisfying the following condition
+\[
+\E \left[ \int_0^T (|\rho(t)| + |\mu(t)| + \sigma^2(t)) ~\mathrm{d}t \right] < \infty
+\]
+
+Let $\theta_0(t)$ and $\theta_1(t)$ denote the number of units of $S_0(t)$ and $S_1(t)$, respectively. Then the value of the portfolio $\theta = (\theta_0, \theta_1)$ is $V^\theta = \theta_0 S_0 + \theta_1 S_1$.
+
+We also suppose that the portfolio is self-financing, i.e.,
+\begin{equation}\label{eq:202401171027}
+\mathrm{d} V^\theta(t) = \theta_0 (t) \mathrm{d} S_0(t) + \theta_1 (t) \mathrm{d} S_1(t)
+\end{equation}
+
+Substituting  
+\begin{equation*}
+\theta_0(t) = \frac{V^\theta(t) - \theta_1(t) S_1(t)}{S_0(t)}
+\end{equation*}
+into \eqref{eq:202401171027} and using \eqref{eq:202401171029} we have
+\begin{equation}\label{eq:202401171031}
+\mathrm{d} V^\theta = \rho(t)(V^\theta(t) - \theta_1(t) S_1(t)) \mathrm{d} t + \theta_1(t) \mathrm{d} S_1
+\end{equation}
+
+Replacing \eqref{eq:202401171030},
+\begin{equation}
+\mathrm{d} V^\theta = [\rho(t)V^\theta(t) + (\mu(t) - \rho(t))\theta_1(t) S_1(t)] \mathrm{d} t + \sigma(t) \theta_1(t) S_1(t) \mathrm{d} W(t)
+\end{equation}
+
+Our goal is to find a replicating (hedging) portfolio
+\begin{equation}\label{eq:202401171039}
+V^\theta(T) = F, \quad \P-a.s.
+\end{equation}
+where $F$ is $\mathcal{F}_t$-measurable. For an European call, for example, $F = \max \{ S_1 - K, 0 \} = (S_1 - K)^+$. 
+
+How much do we need to invest at time $t = 0$ and which portfolio $\theta(t)$ should we use? Are $V^\theta$ and $\theta$ unique?
+
+We consider $(V^\theta(t), \theta_1(t))$ an $\mathbf{F}$-adapted process. The equations \eqref{eq:202401171031} and \eqref{eq:202401171039} form a \textbf{backward stochastic differential equation} (BSDE). To find an explicit solution, we can change the measure and apply Clark-Ocone.
+
+Define 
+\begin{equation}\label{eq:202401171041}
+u(t) = \frac{\mu(t) - \rho(t)}{\sigma(t)}
+\end{equation}
+
+Using the change of measure as in the last section, we can write
+\begin{equation}\label{eq:202401171119}
+\begin{aligned}
+\mathrm{d} V^\theta &= [\rho(t)V^\theta(t) + (\mu(t) - \rho(t))\theta_1(t) S_1(t)] \mathrm{d} t + \sigma(t) \theta_1(t) S_1(t) \mathrm{d} \widetilde{W}(t) \\
+&\quad - \sigma(t) \theta_1(t) S_1(t) \sigma^{-1}(t) (\mu(t) - \rho(t)) \mathrm{d} t \\
+&= \rho(t)V^\theta(t) \mathrm{d} t + \sigma(t) \theta_1(t) S_1(t) \mathrm{d} \widetilde{W}(t)
+\end{aligned}
+\end{equation}
+
+Let
+\[
+U^\theta(t) = e^{-\int_0^t \rho(s) ~\mathrm{d}s} V^\theta(t)
+\]
+
+Then using \eqref{eq:202401171119},
+\[
+\mathrm{d} U^\theta(t) = e^{-\int_0^t \rho(s) ~\mathrm{d}s} \sigma(t) \theta_1(t) S_1(t) ~\mathrm{d}\widetilde{W}(t)
+\]
+or, equivalently, 
+\begin{equation}\label{eq:202401171137}
+e^{-\int_0^t \rho(s) ~\mathrm{d}s} V^\theta(T) = V^\theta(0) + \int_0^T e^{-\int_0^t \rho(s) ~\mathrm{d}s} \sigma(t) \theta_1(t) S_1(t) ~\mathrm{d}\widetilde{W}(t)
+\end{equation}
+
+Applying the \hyperref[thm:clark-ocone-change-measure]{generalized Clark-Ocone formula} to 
+\[G = e^{-\int_0^t \rho(s) ~\mathrm{d}s} F\] we have
+\begin{equation}\label{eq:202401171138}
+G = \E_Q[G] + \int_0^T \E_Q \left[ \left( D_t G - G \left. \int_t^T D_t u(s) ~\mathrm{d}\widetilde{W}(s) \right) ~ \right| ~ \mathcal{F}_t \right] ~\mathrm{d}\widetilde{W}(t)
+\end{equation}
+
+Comparing \eqref{eq:202401171137} with \eqref{eq:202401171138}, we have $V^\theta(0) = \E_Q[G]$ by uniqueness, and the replicating portfolio is given by
+\begin{equation}\label{eq:202405241112}
+\theta_1(t) = e^{-\int_0^t \rho(s) ~\mathrm{d}s} \sigma^{-1}(t) S_1^{-1}(t) \E_Q \left[ \left( D_t G - G \left. \int_t^T D_t u(s) ~\mathrm{d}\widetilde{W}(s) \right) ~ \right| ~ \mathcal{F}_t \right]
+\end{equation}
+
+In particular, if $\rho$ and $\mu$ are constants, and $\sigma(t) = \sigma \neq 0$, then
+\[
+u(t) = u = \frac{\mu - \rho}{\sigma}
+\]
+is also constant, whence $D_t u = 0$. Then the equation \eqref{eq:202405241112} simplifies to
+\begin{equation}\label{eq:202406031637}
+\theta_1(t) = e^{\rho(t-T)} \sigma^{-1} S_1^{-1}(t) \E_Q [ D_t F \mid \mathcal{F}_t ]
+\end{equation}
+
+% \begin{example}
+%
+% \end{example}
+%
+% \begin{example}
+% 
+% \end{example}
+
+\section{Sensitivity Analysis and Computation of Greeks}\label{sensitivity-analysis}
+
+We start in a Markovian setting and compute the solution. To find the $\Delta$-hedge, we want to compute the derivative. This is hard using numerical methods, since the function $\varphi$ may not be smooth or even discontinuous. We use Malliavin calculus instead. 
+
+\subsection*{Context Setting}
+
+Consider $\rho(t) = \rho$ constant and $\mu$ and $\sigma$ Markovian, i.e., $\mu(t) = \mu(S_1(t))$ and $\sigma(t) = \sigma(S_1(t)) \neq 0$. Our goal is to replicate the payoff $F = \varphi(S_1(T))$, where $\varphi : \R \longrightarrow \R$ is bounded, and find a self-financing portfolio $\theta$ and function $f(t,x)$, $x > 0$, such that 
+\[
+V^\theta(t) = \theta_0(t) S_0(t) + \theta_1(t) S_1(t) = f(t, S_1(t))
+\]
+Note that $f(T, x) = \varphi(x)$. Applying the Itô formula, 
+\begin{equation}\label{eq:202401241018}
+\mathrm{d} V^\theta(t) = \frac{\partial f}{\partial t}(t, S_1(t)) ~\mathrm{d}t + \frac{\partial f}{\partial x}(t, S_1(t)) ~\mathrm{d}S_1(t) + \frac{1}{2} \frac{\partial^2 f}{\partial x^2}(t, S_1(t)) \sigma^2(S_1(t)) S_1^2(t) ~\mathrm{d}t
+\end{equation}
+
+By the hypothesis that $\theta$ is self-financing,
+\begin{equation}\label{eq:202401241021}
+\mathrm{d} V^\theta(t) = \theta_0(t) S_0(t) \rho ~\mathrm{d}t + \theta_1 ~\mathrm{d}S_1(t)
+\end{equation}
+
+Comparing equations \eqref{eq:202401241018} and \eqref{eq:202401241021}, we obtain
+\begin{equation}\label{eq:202401221053}
+\begin{aligned}
+	\theta_0 S_0(t) \rho &+ \theta_1(t) S_1(t)\mu(S_1(t)) = \\
+	& \frac{\partial f}{\partial t}(t, S_1(t)) + \frac{\partial f}{\partial x}(t, S_1(t)) S_1(t) \mu(S_1(t)) + \frac{1}{2} \frac{\partial^2 f}{\partial x^2}(t, S_1(t)) \sigma^2(S_1(t)) S_1^2(t)
+\end{aligned}
+\end{equation}
+and
+\begin{equation*}
+\theta_1(t) \sigma(S_1(t)) S_1(t) = \frac{\partial f}{\partial x}(t, S_1(t)) \sigma(S_1(t)) S_1(t)
+\end{equation*}
+whence 
+\begin{equation}\label{eq:202401241023}
+\theta_1(t) = \frac{\partial f}{\partial x}(t, S_1(t))
+\end{equation}
+
+Replacing \eqref{eq:202401241023} into \eqref{eq:202401221053},
+\begin{equation*}
+\left[ f(t, S_1(t)) - S_1(t) \frac{\partial f}{\partial x}(t, S_1(t)) \right] \rho = \frac{\partial f}{\partial t}(t, S_1(t)) + \frac{1}{2} \frac{\partial^2 f}{\partial x^2}(t, S_1(t)) \sigma^2(S_1(t)) S_1^2(t)
+\end{equation*}
+which means that $f(t,x)$ must satisfy the Black-Scholes equation
+\begin{equation*}
+\begin{cases}
+	\frac{\partial f}{\partial t}(t, x) - \rho f(t,x) + \rho x \frac{\partial f}{\partial x}(t, x) + \frac{1}{2} \sigma^2(x) x^2 \frac{\partial^2 f}{\partial x^2}(t, x) = 0 \\
+	f(T,x) = \varphi(x)
+\end{cases}
+\end{equation*}
+
+By Feynman-Kac (see \cite[Theorem 6.6.3]{Silva23stochastic} or \cite[Theorem 6.4.3]{shreve2004stochastic}), the solution is
+\begin{equation*}
+f(t, S_1(t)) = \E^x [e^{-\rho(T-t)} \varphi(X(T-t))] |_{x = S_1(t)} = e^{-\rho(T-t)} \E^x  [\varphi(X(T-t))] |_{x = S_1(t)}
+\end{equation*}
+where $\E^x [\varphi(X(T))]$ denotes $\E [\varphi(X^x(T))]$ and $X(t) = X^x(t)$ is the solution of
+\begin{equation*}
+\mathrm{d} X(t) = X(t) [\rho ~\mathrm{d}t + \sigma(X(t)) ~\mathrm{d}W(t)], \quad X(0) = x > 0
+\end{equation*}
+
+\subsection*{Computing the Delta hedge}
+
+To find the $\Delta$-hedge, we need to compute
+\begin{equation*}
+\begin{aligned}
+	\frac{\partial f}{\partial x} (t, x) = e^{-\rho (T-t)} \frac{\partial}{\partial x} \E^x[\varphi(X(T-t))] = e^{-\rho (T-t)} \frac{\partial}{\partial x} \E[\varphi(X^x(T-t))]
+\end{aligned}
+\end{equation*}
+
+Consider a general Itô diffusion $X^x(t)$, $t \ge 0$, given by 
+\[
+\mathrm{d} X^x(t) = b(X^x(t))~\mathrm{d}t + \sigma(X^x(t))~\mathrm{d}W(t), \quad X^x(0) = x
+\]
+where $b : \R \longrightarrow \R$ and $\sigma : \R \longrightarrow \R$ are functions in $C^1(\R)$ and $\sigma(x) \neq 0$ for all $x \in \R$.
+
+The \textbf{first variation process}
+\[
+	Y(t) = \frac{\partial}{\partial x} X^x(t)
+\]
+is given by
+\[
+\mathrm{d}Y(t) = b'(X^x(t)) Y(t) ~\mathrm{d}t + \sigma'(X^x(t)) Y(t)~\mathrm{d}W(t), \quad Y(0) = 1
+\]
+i.e. (see \cite{kunita1997stochastic}),
+\[
+Y(t) = \exp \left( \int_0^t \left[ b'(X^x(u)) - \frac{1}{2} (\sigma'(X^x(u)))^2 \right] ~\mathrm{d}u + \int_0^t \sigma'(X^x(u)) ~\mathrm{d}W(u) \right)
+\]
+
+Fix $T > 0$ and define
+\[
+g(x) = \E^x[\varphi(X(T))]
+\]
+
+We will use two lemmas to compute the derivative $g'(x)$.
+
+\begin{lemma}\label{lm:202401241049}
+The Malliavin Derivative of $X(t)$ is
+\begin{equation*}
+D_s X(t) = Y(t) Y^{-1}(s) \sigma(X(s))\chi_{[0,t]}(s)
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+Since
+\[
+X(t) = x + \int_0^t b(X(u)) ~\mathrm{d}u + \int_0^t \sigma(X(u)) \mathrm{d}W(u)
+\]
+
+By the \hyperref[thm:ftc]{Fundamental Theorem of Calculus}, for $t \ge s$,
+\[
+Z(t) := D_s X(t) = \int_s^t b'(X(u)) D_s X(u) ~\mathrm{d}u + \int_s^t \sigma'(X(u)) D_s X(u) ~\mathrm{d}W(u) + \sigma(X(s))
+\]
+
+Then 
+\begin{equation*}
+\begin{cases}
+\mathrm{d}Z(t) = b'(X(t)) Z(t) ~\mathrm{d}t + \sigma'(X(t)) Z(t)~\mathrm{d}W(t), \quad t \ge s \\
+Z(s) = \sigma(X(s))
+\end{cases}
+\end{equation*}
+with solution 
+\[
+Z(t) = \sigma(X(s))\exp \left( \int_s^t \left[ b'(X(u)) - \dfrac{1}{2}(\sigma'(X(u)))^2 \right] ~\mathrm{d}u + \int_s^t \sigma'(X(u)) ~\mathrm{d}W(u) \right)
+\]
+for $t \ge s$.
+
+Hence,
+\[
+Z(t) = \sigma(X(s))Y(t)Y^{-1}(s), \quad t \ge s
+\]
+
+\end{proof}
+
+\begin{lemma}\label{lm:20240120241058}
+Let $a(t)$, $t \in [0,T]$, be a deterministic function that integrates to $1$. Then
+\begin{equation}
+Y(T) = \int_0^T D_s X(T) a(s) \sigma^{-1}(X(s)) Y(s) ~\mathrm{d}s
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+	Applying the \hyperref[lm:202401241049]{previous lemma} with $t = T$,
+\[
+Y(T) = Z(T)Y(s) \sigma(X(s))^{-1}, \quad s \in [0,T]
+\]
+
+Hence
+\[
+Y(T) = \int_0^T Y(T) a(s) ~\mathrm{d}s = \int_0^T D_s X(T) a(s) \sigma^{-1}(X(s)) Y(s) ~\mathrm{d}s
+\]
+\end{proof}
+
+\begin{theorem}
+Consider $a$ as in the Lemma \ref{lm:20240120241058}. Then 
+\begin{equation}
+g'(x) = \E^x \left[ \varphi(X(T)) \int_0^T a(t) \sigma^{-1}(X(t))Y(t) ~\mathrm{d}W(t) \right]
+\end{equation}
+
+The random variable 
+\[
+	\pi^\Delta = \int_0^T a(t) \sigma^{-1}(X(t)) Y(t) ~\mathrm{d}W(t)
+\]
+is called \textbf{Malliavin weight}.
+\end{theorem}
+
+\begin{proof}
+1. Suppose that $\varphi$ is smooth with bounded derivative. Then using the Lemma \ref{lm:20240120241058}, \hyperref[thm:chain_rule]{Chain Rule}, and the \hyperref[cor:duality-formula]{Duality Formula}, 
+\begin{equation*}
+\begin{aligned}
+	g^{\prime}(x) & = \E\left[\varphi^{\prime}\left(X^x(T)\right) \frac{d}{d x} X^x(T)\right]=\E\left[\varphi^{\prime}\left(X^x(T)\right) Y(T)\right] \\
+	& = \E^x\left[\int_0^T \varphi^{\prime}(X(T)) D_s X(T) a(s) \sigma^{-1} X(s) Y(s) ~\mathrm{d}s \right] \\
+	& = \E^x\left[\int_0^T D_s\left(\varphi(X(T)) a(s) \sigma^{-1} X(s)\right) Y(s) ~\mathrm{d} s \right] \\
+	& = \E^x\left[\varphi(X(T)) \int_0^T a(s) \sigma^{-1}(X(s)) Y(s) ~\mathrm{d} W(s)\right]
+\end{aligned}
+\end{equation*}
+
+2. General case: we approximate $\varphi$ pointwise boundedly a.e. with respect to the Lebesgue measure on $[0,T]$ by smooth functions $\varphi_m$ with bounded derivative. Define
+\[
+g_m(x) = \E^x[\varphi_m(X(T))]
+\]
+
+Using the previous case, 
+\[
+g_m'(x) = \E^x \left[ \varphi_m(X(T)) \int_0^T a(s) \sigma^{-1}(X(s)) Y(s) ~\mathrm{d}W(s) \right]
+\]
+
+Hence the limit
+\[
+\lim_{m \to \infty} g_m'(x) = \E \left[ \varphi(X(T)) \int_0^T a(s) \sigma^{-1}(X(s)) Y(s) ~\mathrm{d}W(s) \right] =: h(x)
+\]
+is pointwise boundedly in $x$. Thus
+\[
+g_m(x) = g_m(0) + \int_0^x g_m'(t) ~\mathrm{d}t \longrightarrow g_m(0) + \int_0^x h(t)~\mathrm{d}t
+\]
+and
+\[
+g(x) = \lim_{m \to \infty} g_m(x) = g(0) + \int_0^x g(t) ~\mathrm{d}t
+\]
+whence $g'(x) = h(x)$.
+\end{proof}
+
+%\begin{equation}
+%\begin{aligned}
+%
+%\end{aligned}
+%\end{equation}

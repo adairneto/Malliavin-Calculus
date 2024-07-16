@@ -1,0 +1,471 @@
+\chapter{The Hida-Malliavin Derivative on the Integration Space}
+
+In this chapter, we present the Hida-Malliavin derivative, and, using it, we prove the Clark-Ocone formula for $L^2(\P)$. Thorough this chapter, our space $\Omega = \mathcal{S}'(\R)$. 
+
+\section{Stochastic Gradient}
+
+\begin{definition}
+
+\begin{enumerate}
+  \item Let $F \in L^2(\P)$ and $\gamma \in L^2(\R)$. The \textbf{directional derivative} of $F$ in $(\mathcal{S})^\ast$ (respectively, in $L^2(\P)$) in the direction $\gamma$ is 
+\[
+D_\gamma F = \lim_{\varepsilon \to 0} \frac{F(\omega + \varepsilon \gamma) - F(\omega)}{\varepsilon}
+\]
+when the limit exists. 
+
+\item Let $\psi : \R \longrightarrow (\mathcal{S})^\ast$ (resp. to $L^2(\P)$) such that 
+  $ \int_\R \psi(t) \gamma(t) ~\mathrm{d}t$ converges in $\mathcal{S}^\ast$ (resp. in $L^2(\P)$). We say that $F$ is \textbf{Hida-Malliavin differentiable} if
+  \[
+  D_\gamma F = \int_\R \psi(t) \gamma(t) ~\mathrm{d}t
+  \]
+  and we write $\psi(t) = D_t F$ to denote the \textbf{Hida-Malliavin derivative} or the \textbf{stochastic gradient} of $F$ at $t$.
+  \end{enumerate}
+
+  \end{definition}
+
+\begin{example}
+  For $F(\omega) = \langle \omega, f \rangle = \int_\R f(t) ~\mathrm{d}W(t)$, $f \in L^2(\R)$. Then 
+
+  \[
+    D_\gamma F = \frac{\langle \omega + \varepsilon \gamma, f \rangle - \langle \omega, f \rangle}{\varepsilon} =\langle \gamma, f \rangle = \int_\R f(t) \gamma(t) ~\mathrm{d}t
+  \]
+
+  Thus, $F$ is Hida-Malliavin differentiable and 
+  \[
+    D_t \left( \int_\R f(t) ~\mathrm{d}W(t) \right) = f(t)
+  \]
+  
+  This is an alternative (and shorter) computation of what we did on \ref{subsec:chain-rule}.
+\end{example}
+
+  \begin{theorem}[Chain Rule]\label{thm:hida-chain-rule}
+
+    Suppose that $F_1, \ldots, F_m \in L^2(\P)$ are Hida-Malliavin differentiable in $L^2(\P)$, $\varphi \in C^1(\R^m)$, $D_tF_i \in L^2(\P)$ for all $t \in \R$, and $\frac{\partial \varphi}{\partial x_i}(F)D_{\cdot}F_i \in L^2(\P \times \lambda)$. Then $\varphi(F)$ is Hida-Malliavin differentiable and 
+  \[
+  D_t \varphi(F) = \sum_{i=1}^m \frac{\partial \varphi}{\partial x_i}(F) D_t F_i
+  \]
+  \end{theorem}
+
+  \begin{proof}
+  We prove the result for $\varphi \in C^1(\R)$. If $\gamma \in L^2(\R)$, then 
+  \begin{equation*}
+  \begin{aligned}
+    D_\gamma(\varphi(F)) & = \lim_{\varepsilon \rightarrow 0} \frac{\varphi(F(\omega+\varepsilon \gamma))-\varphi(F(\omega))}{\varepsilon}
+                         =\lim _{\varepsilon \rightarrow 0} \frac{\varphi (F(\omega)+\varepsilon D_\gamma F)-\varphi(F(\omega))}{\varepsilon} \\
+                         & =\frac{\varphi^{\prime}(F(\omega)) \varepsilon D_\gamma F}{\varepsilon} = \varphi^{\prime}(F) D_\gamma F
+                         =\int_{\R} \varphi^{\prime}(F) D_t F \gamma(t) ~\mathrm{d} t .
+  \end{aligned}
+    \label{eq:202404241654}
+  \end{equation*} 
+
+  Hence, $\varphi(F)$ is Hida-Malliavin differentiable and $D_t(\varphi(F)) = \varphi'(F) D_t F$.
+  \end{proof}
+
+  It coincides with the Malliavin derivative defined previously on $\mathbf{D}_{1,2}$. This proves Theorem \ref{thm:chain_rule}.
+
+  Definition of the Malliavin derivative in terms of $t$ and the Chaos Expansion. 
+
+  \begin{definition}
+    $F = \sum_{\alpha \in \mathcal{I}} c_\alpha H_\alpha \in (\mathcal{S})^\ast$, we define $D_t F$ as the Malliavin derivative of $F$ as
+    \[
+      D_t F = \sum_{\alpha \in \mathcal{I}} \sum_{k=1}^\infty c_\alpha \alpha_k e_k(t) H_{\alpha-\varepsilon^{(k)}}
+    \]
+    whenever the series converges in $(\mathcal{S})^\ast$. We denote by $\text{Dom}(D_t)$ the set of all $F$ for which the series converges. 
+  \end{definition}
+
+%\begin{lemma}
+%
+%\end{lemma}
+
+  \section{Calculus of the Hida-Malliavin Derivative}
+
+  \begin{theorem}\label{thm:202406071706}
+    If $g \in L^2(\R)$ and $F \in \mathbf{D}_{1,2}$, then 
+    \[
+      F \diamond \int_\R g(t) ~\mathrm{d}W(t) = F \int_\R g(t) ~\mathrm{d}W(t) - \int_\R g(t) D_t F ~\mathrm{d}t
+    \]
+  \end{theorem}
+
+  \begin{proof}[]
+    \textbf{First step:} Define 
+    \[
+      G_y = \exp^\diamond \left( y \int_\R g(t) ~\mathrm{d}W(t) \right) = \exp \left( y \int_\R g(t) ~\mathrm{d}W(t) - \frac{1}{2} y^2 \| g\|^2 \right)
+    \]
+    and 
+    \[
+      F = \exp^\diamond \left( \int_\R f(t) ~\mathrm{d}W(t) \right)
+    \]
+    where $f \in L^2(\R)$. 
+
+  \textbf{Step two:} Compute $F \diamond G_y$.
+
+\begin{equation*}
+\begin{aligned}
+  F \diamond G_y & =\exp ^{\diamond}\left\{\int_{\R} f(t) ~\mathrm{d} W(t)\right\} \diamond \exp ^{\diamond}\left\{y \int_{\R} g(t) ~\mathrm{d} W(t)\right\} \\
+& =\exp ^{\diamond}\left\{\int_{\R}[f(t)+y g(t)] ~\mathrm{d} W(t)\right\} \\
+& =\exp \left\{\int_{\R}[f(t)+y g(t)] ~\mathrm{d} W(t)-\frac{1}{2}\|f+y g\|^2\right\} \\
+& =\exp ^{\diamond}\left\{\int_{\R} f(t) ~\mathrm{d} W(t)\right\} \exp ^{\diamond}\left\{\int_{\R} y g(t) ~\mathrm{d} W(t)\right\} \exp \{-y \langle f, g \rangle \} \\
+& =F G_y \exp \{-y \langle f, g \rangle \} .
+\end{aligned}
+\end{equation*}
+
+  \textbf{Step three:} Differentiate both sides with respect to $y$ and compare. 
+  \[
+    F \diamond \left( G_y \diamond \int_\R g(t) ~\mathrm{d}W(t) \right) = F G_y \exp \{-y \langle f, g \rangle \} \left( \int_\R g(t) ~\mathrm{d}W(t) - \langle f, g \rangle \right)
+  \]
+
+  \textbf{Step four:} Put $y = 0$. 
+  \begin{equation*}
+    \begin{aligned}
+      F \diamond \int_\R g(t) ~\mathrm{d} W(t) &= F \int_\R g(t) ~\mathrm{d}W(t) - F \int_\R f(t) g(t) ~\mathrm{d}t \\
+                                               &= F \int_\R g(t) ~\mathrm{d}W(t) - \int_\R g(t) D_t F ~\mathrm{d}t
+    \end{aligned}
+    \label{eq:202405091635}
+  \end{equation*}
+
+    The result follows since linear combinations of functions $F$ are dense in $\mathbf{D}_{1,2}$. 
+  \end{proof}
+
+  Applying Girsanov and the previous theorem, we obtain the following.
+
+  \begin{theorem}[Integration by parts]
+    If $G, X \in \mathbf{D}_{1,2}$ and $\gamma \in L^2(\R)$, then 
+    \begin{equation}
+      \E [X D_\gamma G] = \E [X G \langle \omega, \gamma \rangle] - \E \left[ G \int_\R \gamma(t) D_t X ~\mathrm{d}t \right]
+      \label{eq:202404301703}
+    \end{equation}
+  \end{theorem}
+
+  Now, using integration by parts, we have the closability of the Hida-Malliavin derivative. 
+
+  \begin{theorem}[Closability]\label{thm:closability_hida_derivative}
+    Suppose that $G, G_n \in \mathbf{D}_{1,2}$, for $n \in \N$, that $\lim_n G_n = G$ in $L^2(\P)$, and that the sequence $(D G_n)$ converges in $L^2(\P \times \lambda)$. Then $\lim_n D G_n = D G$ in $L^2(\P \times \lambda)$.
+  \end{theorem}
+
+  \begin{theorem}[Wick Chain Rule]\label{thm:wick-chain}
+    \begin{enumerate}
+      \item If $F, G \in \mathbf{D}_{1,2}$ and $F \diamond G \in \mathbf{D}_{1,2}$, then 
+        \[
+          D_t (F \diamond G) = F \diamond D_t G + D_t F \diamond G
+        \]
+      \item IF $F \in \mathbf{D}_{1,2}$ and $F^{\diamond n} \in \mathbf{D}_{1,2}$, then
+        \[
+          D_t (F^{\diamond n}) = n F^{\diamond (n-1)} \diamond D_t F 
+        \]
+      \item If $F \in \mathbf{D}_{1,2}$ is Malliavin differentiable and $\exp^\diamond F \in \mathbf{D}_{1,2}$, then 
+        \[
+          D_t \exp^\diamond F = \exp^\diamond F \diamond D_t F 
+        \]
+    \end{enumerate}
+  \end{theorem}
+
+  \begin{proof}[]
+    \begin{enumerate}
+      \item By the Theorem \ref{thm:closability_hida_derivative}, it suffices to prove for 
+        \[
+          F = \exp^\diamond (\langle \omega, f \rangle), \quad G = \exp^\diamond (\langle \omega, g \rangle)
+        \]
+        where $f, g \in L^2(\R)$. 
+
+        Applying the \hyperref[thm:hida-chain-rule]{Chain Rule},
+
+\begin{equation*}
+\begin{aligned}
+D_t(F \diamond G) & = D_t\left(\exp ^{\diamond}(\langle \omega, f \rangle) \diamond \exp ^{\diamond}(\langle \omega, g \rangle)\right) \\
+& =D_t \exp ^{\diamond}(\langle \omega, f+g \rangle)=D_t\left(\exp \left( \langle \omega, f+g \rangle - \frac{1}{2}\|f+g\|_{L^2(\R)}^2\right) \right) \\
+& =\exp \left( \langle \omega, f+g \rangle - \frac{1}{2}\|f+g\|_{L^2(\R)}^2\right) (f(t)+g(t)) \\
+& =\exp ^{\diamond}(\langle \omega, f+g \rangle)(f(t)+g(t)) .
+\end{aligned}
+\end{equation*}
+
+Using it again,
+\begin{equation*}
+\begin{aligned}
+  D_t F \diamond G+F \diamond D_t G & = D_t\left(\exp \left( \langle \omega, f \rangle -\frac{1}{2}\|f\|_{L^2(\R)}^2\right)\right) \diamond G + F \diamond D_t\left(\exp \left( \langle \omega, g \rangle -\frac{1}{2}\|g\|_{L^2(\R)}^2\right) \right) \\
+= & \exp \left( \langle \omega, f \rangle -\frac{1}{2}\|f\|_{L^2(\R)}^2\right) f(t) \diamond G +F \diamond \exp \left( \langle \omega, g \rangle -\frac{1}{2}\|g\|_{L^2(\R)}^2\right) g(t) \\
+= & (F \diamond G)(f(t)+g(t)) \\
+= & \exp ^{\diamond}(\langle \omega, f+g \rangle)(f(t)+g(t)) .
+\end{aligned}
+\end{equation*}
+
+      \item Solved in the exercises.
+
+      \item Follows from the previous item and the closability of the Hida-Malliavin derivative. 
+    \end{enumerate}
+  \end{proof}
+
+  Using these results, we can prove some fundamental properties of the Skorohod integral, such as integration by parts, the duality formula, and the Skorohod isometry. See \cite{nunno2008malliavin}. 
+
+  \section{Conditional Expectation on $(\mathcal{S})^\ast$}
+
+  % Extend the concept of conditional expectation to $(\mathcal{S})^\ast$.
+
+  \begin{definition} 
+    For $F = \sum_{\alpha \in \mathcal{I}} c_\alpha H_\alpha \in (\mathcal{S})^\ast$, we define the \textbf{generalized conditional expectation} of $F$ with respect to $\mathcal{F}_t$ by 
+  \begin{equation}
+  \E [F \mid \mathcal{F}_t] = \sum_{\alpha \in \mathcal{I}} c_\alpha \E [H_\alpha \mid \mathcal{F}_t] 
+  \end{equation}
+  when the series converges in $(\mathcal{S})^\ast$.
+  \end{definition}
+
+  With this definition, we compute the conditional expectation of the Wick product, exponential, singular white noise, and Skorohod integral. 
+
+  \begin{lemma}\label{lm:202405061617}
+    If $F, G, \E [F \mid \mathcal{F}_t]$, and $\E [G \mid \mathcal{F}_t]$ belong to $(\mathcal{S})^\ast$, then 
+    \[
+      \E [F \diamond G \mid \mathcal{F}_t] = \E [F \mid \mathcal{F}_t] \diamond \E [G \mid \mathcal{F}_t]
+    \]
+  \end{lemma}
+
+  \begin{proof}
+    Suppose that $F = I_n(f_n)$ and $G = I_m(g_m)$ for $f_n \in \hat{L}^2(\R^n)$ and $g_m \in \hat{L}^2(\R^m)$. Then 
+    \begin{equation*}
+      \begin{aligned}
+        \E [F \diamond G \mid \mathcal{F}_t] &= \E [I_n(f_n) \diamond I_m(g_m) \mid \mathcal{F}_t] \\ 
+                                             &= \E [I_{n+m}(f_n \hat{\otimes} g_m) \mid \mathcal{F}_t] \\ 
+                                             &= I_{n+m}(f_n \hat{\otimes} g_m (x_1, \ldots, x_n, y_1, \ldots, y_m) \mathbf{1}_{[0,t]} \max_{i,j} \{ x_i, y_j \} ) \\
+                                             &= I_n (f_n (x_1, \ldots, x_n) \mathbf{1}_{[0,t]} \max_{i} x_i ) \diamond I_m (g_m (y_1, \ldots, y_m) \mathbf{1}_{[0,t]} \max_{j} y_j ) \\
+                                             &= \E [F \mid \mathcal{F}_t] \diamond \E [G \mid \mathcal{F}_t]
+      \end{aligned}
+      \label{eq:202405021718}
+    \end{equation*}
+  \end{proof}
+
+  \begin{corollary}
+    If $F$ and $G$ are as in the previous Lemma and $F, G \in L^1(\P)$, then 
+    \[
+    \E [F \diamond G] = \E [F] \cdot \E[G]
+    \]
+  \end{corollary}
+
+  \begin{corollary}
+    Suppose that $F, \exp^\diamond F, \E [F \mid \mathcal{F}_t], \exp^\diamond \E [F \mid \mathcal{F}_t] \in (\mathcal{S})^\ast$. Then 
+    \[
+      \E [\exp^\diamond F \mid \mathcal{F}_t] = \exp^\diamond \E [F \mid \mathcal{F}_t]
+    \]
+
+    If $F \in L^1(\P)$, then 
+    \[
+      \E [\exp^\diamond F] = \exp \E [F]
+    \]
+  \end{corollary}
+
+  \begin{lemma}\label{lm:202405061620}
+    \[
+      \E [\stackrel{\bullet}{W}(s) \mid \mathcal{F}_t] = \stackrel{\bullet}{W}(s) \mathbf{1}_{[0,t]}(s)
+    \]
+  \end{lemma}
+
+\begin{proof}
+\begin{equation*}
+\begin{aligned}
+\E [\stackrel{\bullet}{W}(s) \mid \mathcal{F}_t] &= \E \left.\left[ \sum_{i=1}^\infty e_i(s) H_{\varepsilon^{(i)}} ~\right|~ \mathcal{F}_t \right] \\
+&= \sum_{i=1}^{\infty} e_i(s) \E \left[I_1(e_i) \mid \mathcal{F}_t\right] \\
+&=\sum_{i=1}^{\infty} e_i(s) I_1(e_i \mathbf{1}_{[0, t]}) \\
+& =\sum_{i=1}^{\infty} e_i(s) I_1\left(\sum_{j=1}^{\infty} \langle e_i \mathbf{1}_{[0, t]}, e_j \rangle_{L^2(\R)} e_j\right) \\
+& =\sum_{j=1}^{\infty}\left[\sum_{i=1}^{\infty} \langle e_i \mathbf{1}_{[0, t]}, e_j \rangle_{L^2(\R)} e_i(s)\right] I_1(e_j) \\
+& =\sum_{j=1}^{\infty}\left[\sum_{i=1}^{\infty} \langle e_j \mathbf{1}_{[0, t]}, e_i \rangle_{L^2(\R)} e_i(s)\right] I_1(e_j) \\
+& =\sum_{j=1}^{\infty} e_j(s) \mathbf{1}_{[0, t]}(s) I_1(e_j) = \stackrel{\bullet}{W}(s) \mathbf{1}_{[0, t]}(s)
+\end{aligned}
+\end{equation*}
+\end{proof}
+
+  \begin{theorem}
+    If $Y(s)$ is Skorohod integrable and $\E [Y(s) \mid \mathcal{F}_t] \in (\mathcal{S})^\ast$ for all $s \in \R$, then 
+    \[
+      \E \left. \left[ \int_\R Y(s) ~\delta W(s) ~\right|~ \mathcal{F}_t \right] = \int_0^t \E [Y(s) \mid \mathcal{F}_t] ~\delta W(s)
+    \] 
+  \end{theorem}
+
+  \begin{proof}
+    By the theorem \ref{thm:202406051614},
+    \[
+      \E \left. \left[ \int_\R Y(s) ~\delta W(s) ~\right|~ \mathcal{F}_t \right] = \E \left. \left[ \int_\R Y(s) \diamond \stackrel{\bullet}{W}(s) ~\mathrm{d}s ~\right|~ \mathcal{F}_t \right]
+    \]
+
+    Applying the lemma \ref{lm:202405061617}, 
+    \[
+      \E \left. \left[ \int_\R Y(s) \diamond \stackrel{\bullet}{W}(s) ~\mathrm{d}s ~\right|~ \mathcal{F}_t \right] = \int_\R \E [Y(s) \mid \mathcal{F}_t] \diamond \E [\stackrel{\bullet}{W}(s) \mid \mathcal{F}_t] ~\mathrm{d}s
+    \]
+
+    Now, using lemma \ref{lm:202405061620},
+    \[
+      \int_\R \E [Y(s) \mid \mathcal{F}_t] \diamond \E [\stackrel{\bullet}{W}(s) \mid \mathcal{F}_t] ~\mathrm{d}s = \int_\R \E [Y(s) \mid \mathcal{F}_t] \diamond \stackrel{\bullet}{W}(s) \mathbf{1}_{[0,t]}(s) ~\mathrm{d}s
+    \]
+
+    Using the theorem \ref{thm:202406051614} again, we have the result.
+  \end{proof}
+  
+  \begin{corollary}
+    Under the conditions of the theorem,
+    \[
+      \E \left. \left[ \int_t^\infty Y(s) ~\delta W(s) ~\right|~ \mathcal{F}_t \right] = 0
+    \]
+  \end{corollary}
+
+  It is easier to handle the conditional expectation on the space $\mathcal{G}^\ast$. See \cite{nunno2008malliavin}.
+
+  \section{Generalized Clark-Ocone}
+
+Now we can generalize Clark-Ocone, extending from $\mathbf{D}_{1,2}$ to $L^2(\P)$. Before that, let us fix the following notation:
+
+\[
+  X_i = \int_\R e_i(s) ~\mathrm{d}W(s), \quad X_i^{(t)} = \int_0^t e_i(s) ~\mathrm{d}W(s)
+\]
+and 
+\[
+  X = (X_1, X_2, \ldots ), \quad X^{(t)} =  (X_1^{(t)}, X_2^{(t)}, \ldots )
+\]
+
+Rewriting the \hyperref[thm:hida-chain-rule]{Chain Rule} and the \hyperref[thm:wick-chain]{Wick Chain Rule}, we obtain the next lemma. 
+
+\begin{lemma}\label{lm:202405281604}
+  $P(x) = \sum_{\alpha} c_\alpha x^\alpha$ be a polynomial in $x \in \R^n$. Then 
+  \[
+      D_t P(X) = \sum_{i=1}^n \frac{\partial P}{\partial x_i} (X) e_i(t) = \sum_\alpha c_\alpha \sum_i \alpha_i X^{\alpha - \varepsilon^{(i)}} e_i(t)
+  \]
+  and
+  \[
+    D_t P^\diamond (X) = \sum_{i=1}^n \left( \frac{\partial P}{\partial x_i} \right)^\diamond (X) e_i(t) = \sum_\alpha c_\alpha \sum_i \alpha_i X^{\diamond (\alpha - \varepsilon^{(i)})} e_i(t)
+  \]
+\end{lemma}
+
+\begin{lemma}[Chain Rule]\label{lm:202405281605}
+  Let $P(x)$ be as in the previous lemma, $X^{(t)} = (X_1^{(t)}, \ldots, X_n^{(t)})$, for $t \ge 0$.  
+
+  Then 
+  \[
+    \frac{\mathrm{d}}{\mathrm{d}t} P^\diamond(X^{(t)}) = \sum_{j=1}^n \left( \frac{\partial P}{\partial x_i} \right)^\diamond (X^{(t)}) \diamond e_j(t) \stackrel{\bullet}{W}(t) \in (\mathcal{S})^\ast
+  \]
+\end{lemma}
+
+\begin{proof}
+  Follows from the identity
+  \[
+    \frac{\mathrm{d}}{\mathrm{d}t} \int_0^t e_j(s) ~\mathrm{d}W(s) = e_j(t) \stackrel{\bullet}{W}(t)
+  \]
+  and the \hyperref[thm:wick-chain]{Wick Chain Rule}.
+\end{proof}
+
+First, we prove it for polynomials, and then, with the help of a lemma, we prove it for $L^2(\P)$.
+
+\begin{lemma}[Clark-Ocone for Polynomials]\label{lm:co-poly}
+  $F \in \mathcal{G}^\ast$ be $\mathcal{F}_T$-measurable and $F = P^\diamond(X)$ for some polynomial $P(x)$. Then $F = P^\diamond(X^{(T)})$ and 
+  \[
+    F = \E[F] + \int_0^T \E [D_t F \mid \mathcal{F}_t] ~\mathrm{d}W(t)
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since $F$ is $\mathcal{F}_T$-measurable, 
+  \[
+	F = \E [F \mid \mathcal{F}_T] = P^\diamond (\E [X \mid \mathcal{F}_T]) = P^\diamond (X^{(T)})  
+  \]
+  
+  Using the lemmas \ref{lm:202405281604}, \ref{lm:202405281605}, and \ref{lm:202405061617}, 
+  we have that 
+  \begin{equation*}
+\begin{aligned}
+\int_0^T \E \left[D_t F \mid \mathcal{F}_t\right] ~\mathrm{d} W(t) & =\int_0^T \E \left[\left.\sum_{j=1}^n\left(\frac{\partial P}{\partial x_j}\right)^{\diamond}(X) e_j(t) ~\right\rvert\,~ \mathcal{F}_t\right] ~\mathrm{d} W(t) \\
+& =\int_0^T \sum_{j=i}^n\left(\frac{\partial P}{\partial x_j}\right)^{\diamond}\left(X^{(t)}\right) e_j(t) \diamond \stackrel{\bullet}{W}(t) d t \\
+& =\int_0^T \frac{\mathrm{d}}{\mathrm{d} t} P^{\diamond}(X^{(t)}) ~\mathrm{d} t = P^{\diamond}(X^{(T)})-P^{\diamond} (X^{(0)}) \\
+& =F-P^{\diamond}(0)= F - \E [F],
+\end{aligned}
+\end{equation*}
+  
+\end{proof}
+
+\begin{lemma}\label{lm:conv-co}
+Let $F \in \mathcal{G}^*$, and suppose that
+
+\begin{enumerate}
+  \item For all $q \in \N$, 
+$$
+\int_{\R}\left\|D_t F\right\|_{\mathcal{G}_{-q-1}}^2 ~\mathrm{d} t \leq e^{2 q}\|F\|_{\mathcal{G}_{-q}}^2
+$$
+
+\item $D_t F \in \mathcal{G}^*$, for a.a. $t \geq 0$.
+
+\item $F_n \in \mathcal{G}^*, n \in \N$, and $F_n \longrightarrow F$ in $\mathcal{G}^*$.
+\end{enumerate}
+
+Then there exists a subsequence $F_{n_k}, k \in \N$, such that
+$$
+D_t F_{n_k} \longrightarrow D_t F \quad \text { in } \mathcal{G}^*, \text { for a.a. } t \geq 0
+$$
+and
+$$
+\E \left[D_t F_{n_k} \mid \mathcal{F}_t\right] \longrightarrow \E \left[D_t F \mid \mathcal{F}_t\right], \text { in } \mathcal{G}^* \text { for a.a. } t \geq 0
+$$
+\end{lemma}
+
+\begin{proof}[]
+  See, e.g., \cite{holden1996stochastic}. 
+\end{proof}
+
+\begin{theorem}[Clark-Ocone for $L^2(\P)$]
+  Let $F \in L^2(\P)$ be $\mathcal{F}_T$-measurable. Then the process 
+  \[
+    (t,\omega) \longrightarrow \E [D_t F \mid \mathcal{F}_t](\omega)
+  \]
+  is in $L^2(\P \times \lambda)$, and
+  \[
+    F = \E[F] + \int_0^T \E [D_t F \mid \mathcal{F}_t] ~\mathrm{d}W(t)
+  \]
+\end{theorem}
+
+\begin{proof}[]
+  \textbf{First step: Write the Chaos expansions of $F$ and define $F_n$.} Let 
+  \[
+    F = \sum_{\alpha \in \mathcal{I}} c_\alpha H_\alpha \quad \text{ and define } \quad F_n = \sum_{\alpha \in \mathcal{I}_n} c_\alpha H_\alpha 
+  \]
+  where $\mathcal{I}_n = \{ \alpha \in \mathcal{I} : |\alpha| \le n, l(\alpha) \le n\}$ and $l(\alpha) = \max \{ i : \alpha_i \neq 0 \}$ is the length of $\alpha$. 
+
+  \textbf{Second step: Apply the result for polynomials.} By the \ref{lm:co-poly}, for all $n$,
+  \[
+  F_n = \E [F_n] + \int_0^T \E [D_t F_n \mid \mathcal{F}_t] ~\mathrm{d}W(t)
+  \]
+
+  \textbf{Third step: Use Itô Representation Theorem.} There exists a unique $\mathbf{F}$-adapted process $u(t)$, $t \in [0,T]$, such that 
+  \[
+  \E \left[ \int_0^T u^2(t) ~\mathrm{d}t \right] < \infty \quad \text{ and } \quad F = \E [F] + \int_0^T u(t) ~\mathrm{d}W(t)
+  \]
+
+  \textbf{Fourth step: Take $F_n \to F$ in $L^2(\P)$.} Using the previous couple of equations, as $n \to \infty$, we have
+  \[
+  \E \left[ \int_0^T \left( \E [D_t F_n \mid \mathcal{F}_t] - u(t) \right)^2 ~\mathrm{d}t \right] = \E [(F_n - F - \E[F_n] + \E[F])^2] \longrightarrow 0
+  \]
+  whence follows that $\E [D_t F_n \mid \mathcal{F}_t] \longrightarrow u$ in $L^2(\P \times \lambda)$.
+
+  \textbf{Fifth step: Apply the convergence lemma.} Using \ref{lm:conv-co}, we know that for some subsequence $F_{n_k}$, 
+  \[
+  \E [D_t F_{n_k} \mid \mathcal{F}_t] \longrightarrow \E [D_t F \mid \mathcal{F}_t]
+  \]
+  as $k \to \infty$ in $\mathcal{G}^\ast$. 
+  
+  Hence, 
+  \[
+  u(t) = \E [D_t F \mid \mathcal{F}_t], \quad \P \text{-a.e.}
+  \]
+\end{proof}
+
+\begin{theorem}[Clark-Ocone for $L^2(\P)$ Under Change of Measure]\label{thm:clark-ocone-change-measure-L2p}
+Suppose that $F \in L^2(\P)$ is $\mathcal{F}_T$-measurable, and that the following conditions are met
+\begin{enumerate}
+	\item $\E_Q[|F|] < \infty$;
+	\item $\E_Q \left[ \int_0^T |D_t F|^2 ~\mathrm{d}t \right] < \infty$;
+	\item $\E_Q \left[ |F| \int_0^T \left( \int_0^T D_t u(s) ~\mathrm{d}W(s) + \int_0^T u(s) D_t u(s) ~\mathrm{d}s \right)^2 ~\mathrm{d}t \right] < \infty$. 
+\end{enumerate}
+
+Then
+\begin{equation*}
+	F = \E_Q[F] + \int_0^T \E_Q \left[ \left( D_t F - F \left. \int_t^T D_t u(s) ~\mathrm{d}\widetilde{W}(s) \right) ~ \right|~  \mathcal{F}_t \right] ~\mathrm{d}\widetilde{W}(t)
+\end{equation*}
+where $\widetilde{W}(t)$ is a Brownian motion under the measure $Q$ and $D_t F \in \mathcal{G}^\ast$ is the Hida-Malliavin derivative.
+\end{theorem}
+
+\begin{proof}
+Analogous to the \hyperref[thm:clark-ocone-change-measure]{the case for $\mathbf{D}_{1,2}$}. See, e.g. \cite{okur2010white}.
+\end{proof}
+
+As a final remark, extending further to $\mathcal{G}^\ast$ is possible. See \cite{nunno2008malliavin}.

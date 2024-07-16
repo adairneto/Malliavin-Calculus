@@ -1,0 +1,131 @@
+\chapter{Application to Finance}
+
+\section{Introduction}
+
+Getting back to the context of the section \hyperref[portfolio-selection]{Portfolio Selection}, we saw that, for a contingent claim with payoff $F$ (where $F \in L^2(\P)$, is $\mathcal{F}_T$-measurable and bounded below), the replicating portfolio is given by \eqref{eq:202405241112}. In particular, if $\rho$ is constant, and $\mu$ and $\sigma$ are deterministic, then we have \eqref{eq:202406031637}, which we reproduce here for the reader's ease.
+\[
+\theta_1 (t) = e^{-\rho(T-t)} \sigma^{-1}(t) S_1^{-1}(t) \E_Q [D_t F \mid \mathcal{F}_t]
+\]
+
+In this chapter, we consider a digital option, which has a payoff at maturity
+\[
+F = \mathbf{1}_{[K, \infty)}(W(T))
+\]
+where $K$ is the exercise price. We aim to compute the conditional expectation $\E_Q [D_t F \mid \mathcal{F}_t]$. 
+
+\section{Necessary Results}
+
+To do that, we need the following concept.
+
+\begin{definition}[Donsker delta function]
+Let $Y : \Omega \longrightarrow \R$, $Y \in \mathcal{G}^\ast$. The continuous function
+\[
+\delta_Y (\cdot) : \R \longrightarrow {\mathcal{G}^{\ast}}
+\]
+is the \textbf{Donsker delta function} of $Y$ if it has the property that
+\[
+\int_\R f(y) \delta_Y(y) ~\mathrm{d}y = f(Y) \quad \text{a.s.}
+\]
+for all measurable $f : \R \longrightarrow \R$ such that the integral converges. 
+\end{definition}
+
+\begin{theorem}\label{thm:aase4.4}
+Suppose that
+\begin{enumerate}
+\item $\alpha : [0,T] \longrightarrow \R^n$ is a deterministic function such that $\| \alpha \|^2 = \int_0^T \alpha^2(s) ~\mathrm{d}s < \infty$.
+\item $\varphi : [0,T] \longrightarrow \R^{n \times n}$ is a deterministic function such that $\| \varphi \|^2 = \sum_{i,j=1}^n \int_0^T \varphi_{ij}^2(s) ~\mathrm{d}s < \infty$.
+\item $f : \R^n \longrightarrow \R$ is bounded.
+\end{enumerate} 
+
+Define, for $t \in [0,T]$,
+\begin{equation*}
+Y(t) = \int_0^t \varphi(s) ~\mathrm{d}B(s) + \int_0^t \varphi(s) \alpha(s) ~\mathrm{d}s
+\end{equation*}
+
+Then 
+\begin{equation*}
+f(Y(T)) = V_0 + \int_0^T u(t, \omega) \diamond (\alpha(t) + W(t)) ~\mathrm{d}t
+\end{equation*}
+where $|A| = \det A$ and $A$ is the inverse of the covariance matrix of $Y$,
+\begin{equation*}
+V_0 = (2 \pi)^{-n/2} \sqrt{|A|} \int_{\R^n} f(y) \exp \left( -\frac{1}{2} y^T Ay \right) ~\mathrm{d}y
+\end{equation*}
+and 
+\begin{equation*}
+u(t, \omega) = (2 \pi)^{-n/2} \sqrt{|A|} \int_{\R^n} f(y) \exp^\diamond \left( -\frac{1}{2} (y-Y(t))^T \diamond A(y-Y(t)) \right) \diamond ((y-Y(t))^T A \varphi(t)) ~\mathrm{d}y
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+Refer to \cite[Theorem 4.4]{aase2001using}.
+\end{proof}
+
+The next result is a simpler version of \cite[Lemma 3.21]{hu2003fractional}.
+
+\begin{theorem}\label{thm:wick-diff-meas}
+Let $\diamond_\P$ and $\diamond_Q$ denote the Wick product for the probability measures $\P$ and $Q$ respectively, and $u$ as in the \hyperref[thm:girsanov]{Girsanov Theorem}. Then, $F \diamond_\P G = F \diamond_Q G$.
+\end{theorem} 
+
+\begin{proof}
+Let $F = \exp^\diamond \left( \int_0^\infty f(t) ~\mathrm{d}W(t) \right)$ and $G = \exp^\diamond \left( \int_0^\infty g(t) ~\mathrm{d}W(t) \right)$. Then, 
+\begin{equation*}
+\begin{aligned}
+F \diamond_\P G = \exp \left( \int_0^\infty (f(s) + g(s)) ~\mathrm{d}W(s) - \frac{1}{2} \|f + g\|^2 \right)
+\end{aligned}
+\end{equation*}
+
+Applying Girsanov to $F$ and $G$,
+\[
+F = \exp^\diamond \left( \int_0^\infty f(s) ~\mathrm{d}\widetilde{W}(s) - \langle f, u \rangle_{L^2} \right), 
+\quad \text{ and } \quad
+G = \exp^\diamond \left( \int_0^\infty g(s) ~\mathrm{d}\widetilde{W}(s) - \langle g, u \rangle_{L^2} \right) 
+\]
+
+Computing the product,
+\begin{equation*}
+\begin{aligned}
+F \diamond_Q G &= \exp \left( \int_0^\infty (f(s) + g(s)) ~\mathrm{d}\widetilde{W}(s) - \frac{1}{2} \|f + g\|^2 - \langle f+g, u \rangle_{L^2} \right) \\
+&= \exp \left( \int_0^\infty (f(s) + g(s)) ~\mathrm{d}W(s) - \frac{1}{2} \|f + g\|^2 \right)
+\end{aligned}
+\end{equation*}
+
+Hence, $F \diamond_\P G = F \diamond_Q G$ for exponential functions. By density, we have the result.
+\end{proof}
+
+\section{Main Result}
+
+\begin{theorem}
+Suppose that $\rho$ is constant, and $u(t)$, as defined in \eqref{eq:202401171041}, is deterministic and satisfying $\E [u^2(t)] < \infty$. Then the replicating portfolio for hedging $\mathbf{1}_{[K, \infty)}(W(T))$ is 
+\begin{equation}\label{eq:replicating-digital}
+\theta_1(t) = e^{-\rho(T-t)} (2 \pi (T-t))^{-1/2} \sigma^{-1}(t) S_1^{-1}(t) \exp \left( - \frac{(K - W(t))^2}{2(T-t)} \right)
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+First, notice that $F = \mathbf{1}_{[K, \infty)}(W(T)) \in L^2(\P)$. Thus, we can use \eqref{eq:202406031637}.
+
+Now we compute $\E_Q [D_t F \mid \mathcal{F}_t]$ using the Donsker delta function by taking $f(y) = \mathbf{1}_{[K, \infty)}(y)$, and $Y(T) = W(T)$. By the Theorem \ref{thm:aase4.4},
+\[
+\mathbf{1}_{[K, \infty)}(W(T)) = \int_K^\infty (2 \pi T)^{-1/2} \exp^\diamond \left( - \frac{(y-W(T))^{\diamond 2}}{2T} \right) ~\mathrm{d}y
+\]
+
+By the \hyperref[thm:wick-chain]{Chain Rule for the Wick product}, 
+\begin{equation*}
+\begin{aligned}
+D_t (\mathbf{1}_{[K, \infty)}(W(T))) &= \int_K^\infty (2 \pi T)^{-1/2} \exp^\diamond \left( - \frac{(y-W(T))^{\diamond 2}}{2T} \right) \diamond \frac{(y-W(T))}{2T} ~\mathrm{d}y \\ 
+&= (2 \pi T)^{-1/2} \exp^\diamond \left( - \frac{(K-W(T))^{\diamond 2}}{2T} \right)
+\end{aligned}
+\end{equation*}
+
+Denoting by $\hat{\diamond}$ the Wick product with respect to the probability measure $Q$, then since $\hat{\diamond} = \diamond$ (Theorem \ref{thm:wick-diff-meas}), we have
+
+\begin{equation*}
+\begin{aligned}
+\E [D_t (\mathbf{1}_{[K, \infty)}(W(T))) \mid \mathcal{F}_t] &= \E_Q \left.\left[ (2\pi T)^{-1/2} \exp^{\hat{\diamond}} \left(- \frac{(K-W(T))^{\hat{\diamond} 2}}{2T} \right) ~ \right| ~ \mathcal{F}_t \right] \\
+&= (2\pi T)^{-1/2} \E_Q \left.\left[ \exp^{\hat{\diamond}} \left(- \frac{(K-\widetilde{W}(T) + \int_0^T u(s) ~\mathrm{d}s)^{\hat{\diamond} 2}}{2T} \right) ~ \right| ~ \mathcal{F}_t \right] \\
+&= (2\pi T)^{-1/2} \exp \left( - \frac{(K-W(t))^2}{2 (T-t)} \right)
+\end{aligned}
+\end{equation*}
+
+\end{proof}
+
