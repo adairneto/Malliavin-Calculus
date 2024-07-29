@@ -1,28 +1,71 @@
 \documentclass[12pt,a4paper,twoside]{report}
 \input{../LaTeX_Template/preamble_basic.tex}
 
-% Title
+%% Title
 \author{\sffamily \href{https://github.com/adairneto}{Adair Antonio da Silva Neto}}
 \title{\sffamily \uppercase{Malliavin Calculus}}
 \date{\sffamily \today}
 
 % SetucopeFuzzyCommandSearccopeFuzzyCommandSearch))
 \hypersetup{
-    pdftitle={Malliavin Calculus},
+    pdftitle={Malliavin Calculus with Applications to Finance},
 }
+
+\definecolor{grey}{rgb}{0.9,0.9,0.9} % Colour of the box surrounding the title
 
 \begin{document}
 
 % Make title and TOC, start counting pages
-\maketitle
+%\maketitle
+
+% ----------------------------------------------------------------
+\begin{titlepage} % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
+	
+	%------------------------------------------------
+	%	Grey title box
+	%------------------------------------------------
+	
+	\colorbox{grey}{
+		\parbox[t]{0.93\textwidth}{ % Outer full width box
+			\parbox[t]{0.91\textwidth}{ % Inner box for inner right text margin
+				\raggedleft % Right align the text
+				\fontsize{50pt}{80pt}\selectfont % Title font size, the first argument is the font size and the second is the line spacing, adjust depending on title length
+				\vspace{0.7cm} % Space between the start of the title and the top of the grey box
+				
+				Malliavin Calculus\\
+				with Applications to Finance
+				
+				\vspace{0.7cm} % Space between the end of the title and the bottom of the grey box
+			}
+		}
+	}
+	
+	\vfill % Space between the title box and author information
+	
+	%------------------------------------------------
+	%	Author name and information
+	%------------------------------------------------
+	
+	\parbox[t]{0.93\textwidth}{ % Box to inset this section slightly
+		\raggedleft % Right align the text
+		\large % Increase the font size
+		{\Large Adair Antonio da Silva Neto}\\[4pt] % Extra space after name
+		\today \\
+		%Institution Name\\[4pt] % Extra space before URL
+		
+		\hfill\rule{0.2\linewidth}{1pt}% Horizontal line, first argument width, second thickness
+	}
+	
+\end{titlepage}
+% ----------------------------------------------------------------
+
 \tableofcontents
 \thispagestyle{empty}
 \setcounter{page}{1}
 
-
 \chapter*{Preface}
 
-These notes are being written as a part of my Undergraduate Research on `Malliavin Calculus with Applications to Finance'. My previous notes, covering the basics of Stochastic Differential Equations up to Applications in Option Pricing, are available at \cite{Silva23stochastic}.
+These notes were written as a part of my Undergraduate Research on `Malliavin Calculus with Applications to Finance'. My previous notes, covering the basics of Stochastic Differential Equations up to Applications in Option Pricing, are available at \cite{Silva23stochastic}.
 
 \include{Chapters/Chaos-Expansion}
 \include{Chapters/The_Skorohod_Integral.tex}

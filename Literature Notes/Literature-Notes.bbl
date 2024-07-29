@@ -9,16 +9,20 @@ Knut Aase, Bernt {\O}ksendal, and Jan Ub{\o}e.
 \bibitem[dSN23]{Silva23stochastic}
 Adair~Antonio da~Silva~Neto.
 \newblock Stochastic differential equations.
-\newblock \url{ https://github.com/adairneto/Stochastic-Differential-Equations/blob/main/Notes/Main.pdf }, June 2023.
+\newblock \url{
+  https://github.com/adairneto/Stochastic-Differential-Equations/blob/main/Notes/Main.pdf
+  }, June 2023.
 
 \bibitem[GV64]{gelfand1964}
 I.M. Gel’fand and N.Ya. Vilenkin.
-\newblock Generalized functions, vol. 4. applications of harmonic analysis, 1964.
+\newblock Generalized functions, vol. 4. applications of harmonic analysis,
+  1964.
 
 \bibitem[H{\O}03]{hu2003fractional}
 Yaozhong Hu and Bernt {\O}ksendal.
 \newblock Fractional white noise calculus and applications to finance.
-\newblock {\em Infinite dimensional analysis, quantum probability and related topics}, 6(01):1--32, 2003.
+\newblock {\em Infinite dimensional analysis, quantum probability and related
+  topics}, 6(01):1--32, 2003.
 
 \bibitem[H{\O}UZ96]{holden1996stochastic}
 Helge Holden, Bernt {\O}ksendal, Jan Ub{\o}e, and Tusheng Zhang.
@@ -28,11 +32,13 @@ Helge Holden, Bernt {\O}ksendal, Jan Ub{\o}e, and Tusheng Zhang.
 \bibitem[It{\^o}51]{ito1951multiple}
 Kiyosi It{\^o}.
 \newblock Multiple wiener integral.
-\newblock {\em Journal of the Mathematical Society of Japan}, 3(1):157--169, 1951.
+\newblock {\em Journal of the Mathematical Society of Japan}, 3(1):157--169,
+  1951.
 
 \bibitem[Kun97]{kunita1997stochastic}
 Hiroshi Kunita.
-\newblock {\em Stochastic flows and stochastic differential equations}, volume~24.
+\newblock {\em Stochastic flows and stochastic differential equations},
+  volume~24.
 \newblock Cambridge university press, 1997.
 
 \bibitem[NN18]{nualart2018introduction}
@@ -42,22 +48,26 @@ David Nualart and Eulalia Nualart.
 
 \bibitem[N{\O}P08]{nunno2008malliavin}
 Giulia~Di Nunno, Bernt {\O}ksendal, and Frank Proske.
-\newblock {\em Malliavin calculus for L{\'e}vy processes with applications to finance}.
+\newblock {\em Malliavin calculus for L{\'e}vy processes with applications to
+  finance}.
 \newblock Springer, 2008.
 
 \bibitem[Oks13]{oksendal2013stochastic}
 Bernt Oksendal.
-\newblock {\em Stochastic differential equations: an introduction with applications}.
+\newblock {\em Stochastic differential equations: an introduction with
+  applications}.
 \newblock Springer Science \& Business Media, 2013.
 
 \bibitem[Oku10]{okur2010white}
 Yeliz~Yolcu Okur.
-\newblock White noise generalization of the clark-ocone formula under change of measure.
+\newblock White noise generalization of the clark-ocone formula under change of
+  measure.
 \newblock {\em Stochastic analysis and applications}, 28(6):1106--1121, 2010.
 
 \bibitem[S{\etalchar{+}}04]{shreve2004stochastic}
 Steven~E Shreve et~al.
-\newblock {\em Stochastic calculus for finance II: Continuous-time models}, volume~11.
+\newblock {\em Stochastic calculus for finance II: Continuous-time models},
+  volume~11.
 \newblock Springer, 2004.
 
 \end{thebibliography}
